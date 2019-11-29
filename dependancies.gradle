@@ -1,0 +1,57 @@
+ext {
+
+    supportLibVersion = '26.1.0'
+    retrofitVersion = '2.3.0'
+    okHttpVersion = '3.8.1'
+    leakCanaryVersion = '1.5.1'
+    frescoVersion = '1.5.0'
+    glideVersion = '3.8.0' // Glide is an image downloading library, Use any one fresco or glide.
+    gsonVersion = '2.8.1'
+    crashlyticsVersion = '2.7.1@aar'
+    archLifecycleVersion = "1.0.0-alpha9-1"
+    archRoomVersion = "1.0.0-alpha9-1"
+    paggingVersion = "1.0.0-alpha1"
+
+    appDependencies = [
+            fresco             : "com.facebook.fresco:fresco:$frescoVersion",
+            // if your app supports below API 14
+            frescoanim         :  "com.facebook.fresco:animate-base-support:$frescoVersion",
+            // if your app support gif
+            frescogif          :  "com.facebook.fresco:animated-gif:$frescoVersion",
+
+            glide              : "com.github.bumptech.glide:glide:$glideVersion",
+
+            lifecycle          : "android.arch.lifecycle:extensions:$archLifecycleVersion",
+            lifecycleCompiler  : "android.arch.lifecycle:compiler:$archLifecycleVersion",
+            room            : "android.arch.persistence.room:runtime:$archRoomVersion",
+            roomCompiler    : "android.arch.persistence.room:compiler:$archRoomVersion",
+            pagging         : "android.arch.paging:runtime:$paggingVersion",
+
+            // google support libraries
+            appCompat            : "com.android.support:appcompat-v7:$supportLibVersion",
+//            supportAnnotation    : "com.android.support:support-annotations:$supportLibVersion",
+            recyclerviewLibrary  : "com.android.support:recyclerview-v7:$supportLibVersion",
+            design               : "com.android.support:design:$supportLibVersion",
+
+            // retrofit and its supporting libraries
+            retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+
+            // Use jackson or GSON convertor for JSON parsing.
+            retrofitJacksonConverter: "com.squareup.retrofit2:converter-jackson:$retrofitVersion",
+            retrofitGsonConvertor: "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+
+            okhttpLogging        : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
+            okhttpurlconnection  : "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion",
+
+            debugLeakCanary      : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
+            releaseLeakCanary    : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
+
+            imagepicker          : "com.kbeanie:multipicker:1.1.31@aar",
+
+            lifecycle          : "android.arch.lifecycle:extensions:$archLifecycleVersion",
+            lifecycleCompiler  : "android.arch.lifecycle:compiler:$archLifecycleVersion",
+
+//            gson    : "com.google.code.gson:gson:$gsonVersion",
+            crashlytics : "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion",
+    ]
+}

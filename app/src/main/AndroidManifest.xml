@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sql.projecttemplate">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="com.sql.projecttemplate.TemplateApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+        <!-- ALL ACTIVITIES -->
+
+        <activity
+            android:name="com.sql.projecttemplate.views.activities.HomeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sql.projecttemplate.views.activities.AppBaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.sql.projecttemplate.views.activities.DetailActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity xmlns:tools="http://schemas.android.com/tools"
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:replace="android:theme" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <!-- ALL RECEIVERS REGISTER HERE -->
+
+        <!-- ALL SERVICES REGISTER HERE -->
+
+        <!-- MISC. Like Meta data, or any google map key please register here. -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="789127f2bf4ca4b0d4e84d0f36e3606a566cd4e3" />
+    </application>
+
+</manifest>

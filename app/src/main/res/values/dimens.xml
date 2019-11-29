@@ -1,0 +1,50 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="font_xlarge">22sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_normal">16sp</dimen>
+    <dimen name="font_medium">14sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_tiny">10sp</dimen>
+
+    <!-- typical sizes of views -->
+    <dimen name="button_height_tall">60dp</dimen>
+    <dimen name="button_height_normal">40dp</dimen>
+    <dimen name="button_height_short">32dp</dimen>
+    <dimen name="standard_control_height">48dp</dimen>
+
+    <dimen name="standard_tab_indicator_height">2dp</dimen>
+
+    <!-- typical spacing between two views -->
+    <dimen name="spacing_standard">8dp</dimen>
+    <dimen name="spacing_control">4dp</dimen>
+    <dimen name="spacing_control_half">2dp</dimen>
+    <dimen name="spacing_standard_inverse">-8dp</dimen>
+    <dimen name="spacing_control_inverse">-4dp</dimen>
+    <dimen name="spacing_control_half_inverse">-2dp</dimen>
+
+    <dimen name="spacing_activity_container">16dp</dimen>
+
+
+    <dimen name="list_row_height">72dp</dimen>
+
+    <dimen name="design_fab_size_normal">56dp</dimen>
+    <dimen name="design_fab_size_mini">40dp</dimen>
+
+    <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="screen_edge_left_right_margin">16dp</dimen>
+    <dimen name="content_left_margin">72dp</dimen>
+    <dimen name="navigation_item_height">48dp</dimen>
+    <dimen name="navigation_content_spacing">8dp</dimen>
+    <dimen name="navigation_menu_right_margin">56dp</dimen>
+    <dimen name="profile_iv_list_item_width_height">42dp</dimen>
+    <dimen name="small_iv_list_item_width_height">24dp</dimen>
+    <dimen name="profile_iv_list_item_padding">4dp</dimen>
+    <dimen name="toolbar_icon_width_height">48dp</dimen>
+    <dimen name="toolbar_icon_padding">12dp</dimen>
+
+</resources>

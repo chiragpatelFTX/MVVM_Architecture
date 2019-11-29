@@ -1,0 +1,131 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+
+    signingConfigs {
+        config {
+            storeFile file("template_keystore.jks")
+            keyAlias 'template'
+            keyPassword '123456'
+            storePassword '123456'
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.sql.projectTemplate"
+        minSdkVersion appMinSdkVersion
+        targetSdkVersion appTargetedSdkVersion
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+//    api project(':domain')
+    def appDependencies = rootProject.ext.appDependencies
+    implementation appDependencies.fresco
+    implementation 'com.google.android.gms:play-services-auth:11.4.2'
+    implementation 'com.facebook.android:facebook-android-sdk:4.27.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation appDependencies.lifecycle
+    annotationProcessor appDependencies.lifecycleCompiler
+    implementation appDependencies.room
+    annotationProcessor appDependencies.roomCompiler
+    implementation appDependencies.pagging
+
+
+
+
+    implementation appDependencies.appCompat
+    implementation appDependencies.recyclerviewLibrary
+    implementation appDependencies.imagepicker
+    api appDependencies.design
+    api appDependencies.retrofit
+    api appDependencies.retrofitJacksonConverter
+    api appDependencies.retrofitGsonConvertor
+    api appDependencies.okhttpLogging
+    api appDependencies.okhttpurlconnection
+    debugImplementation appDependencies.debugLeakCanary
+    releaseImplementation appDependencies.releaseLeakCanary
+    implementation appDependencies.lifecycle
+    annotationProcessor appDependencies.lifecycleCompiler
+
+    implementation(appDependencies.crashlytics) {
+        transitive = true
+    }
+    implementation appDependencies.pagging
+    implementation appDependencies.room
+    annotationProcessor appDependencies.roomCompiler
+
+
+
+
+
+    //    compile appDependencies.glide
+    apply plugin: 'com.google.gms.google-services'
+}

@@ -1,0 +1,9 @@
+Version 1.1
+Release by : dev1618
+Release Date : 30/10/2017
+
+Notes :
+1. Latest source with the new gradle plugin 3.0.0 and studio 3.0
+2. Updated gradle versions
+3. Code commenting for each methods and class
+4. Removed multipicker as module, and added as a gradle in framework module.
