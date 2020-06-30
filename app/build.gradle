@@ -10,6 +10,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 
 repositories {
@@ -18,8 +19,8 @@ repositories {
 
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion appCompileSdkVersion
+//    buildToolsVersion '26.0.2'
 
     signingConfigs {
         config {
@@ -31,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.sql.projectTemplate"
+        applicationId "com.ftx.mvvm_template"
         minSdkVersion appMinSdkVersion
         targetSdkVersion appTargetedSdkVersion
         versionCode 1
@@ -99,8 +100,6 @@ dependencies {
     implementation appDependencies.pagging
 
 
-
-
     implementation appDependencies.appCompat
     implementation appDependencies.recyclerviewLibrary
     implementation appDependencies.imagepicker
@@ -123,9 +122,5 @@ dependencies {
     annotationProcessor appDependencies.roomCompiler
 
 
-
-
-
     //    compile appDependencies.glide
-    apply plugin: 'com.google.gms.google-services'
 }

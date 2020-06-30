@@ -8,15 +8,15 @@
 
         <variable
             name="event"
-            type="com.sql.projecttemplate.views.activities.DetailActivity" />
+            type="com.ftx.mvvm_template.views.activities.DetailActivity" />
 
         <variable
             name="albumModel"
-            type="com.sql.projecttemplate.model.db.models.AlbumModel" />
+            type="com.ftx.mvvm_template.model.db.models.AlbumModel" />
 
         <variable
             name="userModel"
-            type="com.sql.projecttemplate.model.db.models.UserModel" />
+            type="com.ftx.mvvm_template.model.db.models.UserModel" />
 
     </data>
 

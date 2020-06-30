@@ -7,7 +7,7 @@
 
         <variable
             name="userModel"
-            type="com.sql.projecttemplate.model.db.models.UserModel" />
+            type="com.ftx.mvvm_template.model.db.models.UserModel" />
 
     </data>
 
