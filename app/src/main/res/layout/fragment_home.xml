@@ -7,7 +7,7 @@
 
         <variable
             name="event"
-            type="com.sql.projecttemplate.views.fragments.HomeFragment" />
+            type="com.ftx.mvvm_template.views.fragments.HomeFragment" />
 
     </data>
 

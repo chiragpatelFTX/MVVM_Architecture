@@ -2,10 +2,10 @@
 apply from: 'dependancies.gradle'
 apply from: 'variants.gradle'
 
-ext.appCompileSdkVersion = 26
-ext.appBuildToolsVersion = "26.0.2"
+ext.appCompileSdkVersion = 28
+//ext.appBuildToolsVersion = "26.0.2"
 ext.appMinSdkVersion = 15
-ext.appTargetedSdkVersion = 26
+ext.appTargetedSdkVersion = 28
 ext.appPublicNonDefault = false
 ext.appPublicConfig = "debug"
 
@@ -17,8 +17,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.google.gms:google-services:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.google.gms:google-services:4.3.3'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

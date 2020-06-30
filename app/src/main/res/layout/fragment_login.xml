@@ -6,7 +6,7 @@
 
         <variable
             name="event"
-            type="com.sql.projecttemplate.views.fragments.LoginFragment" />
+            type="com.ftx.mvvm_template.views.fragments.LoginFragment" />
 
     </data>
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.sql.projecttemplate.views.widgets.CustomEditText
+            <com.ftx.mvvm_template.views.widgets.CustomEditText
                 android:id="@+id/aLogin_edtUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:layout_below="@+id/input_layout_username"
             android:layout_marginTop="@dimen/spacing_standard">
 
-            <com.sql.projecttemplate.views.widgets.CustomEditText
+            <com.ftx.mvvm_template.views.widgets.CustomEditText
                 android:id="@+id/aLogin_edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:layout_marginTop="@dimen/spacing_activity_container"
             android:orientation="horizontal">
 
-            <com.sql.projecttemplate.views.widgets.CustomButton
+            <com.ftx.mvvm_template.views.widgets.CustomButton
                 android:id="@+id/aLogin_btnFacebook"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                 android:text="@string/btn_alogin_facebook"
                 android:textColor="@android:color/white" />
 
-            <com.sql.projecttemplate.views.widgets.CustomButton
+            <com.ftx.mvvm_template.views.widgets.CustomButton
                 android:id="@+id/aLogin_btnGoogle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
-        <com.sql.projecttemplate.views.widgets.CustomButton
+        <com.ftx.mvvm_template.views.widgets.CustomButton
             android:id="@+id/fLogin_btnNewAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

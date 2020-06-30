@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sql.projecttemplate">
+    package="com.ftx.mvvm_template">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
 
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.sql.projecttemplate.TemplateApplication"
+        android:name="com.ftx.mvvm_template.TemplateApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +18,7 @@
         <!-- ALL ACTIVITIES -->
 
         <activity
-            android:name="com.sql.projecttemplate.views.activities.HomeActivity"
+            android:name="com.ftx.mvvm_template.views.activities.HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,10 +26,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.sql.projecttemplate.views.activities.AppBaseActivity"
+            android:name="com.ftx.mvvm_template.views.activities.AppBaseActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.sql.projecttemplate.views.activities.DetailActivity"
+            android:name="com.ftx.mvvm_template.views.activities.DetailActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity xmlns:tools="http://schemas.android.com/tools"

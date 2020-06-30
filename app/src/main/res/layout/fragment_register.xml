@@ -6,7 +6,7 @@
 
         <variable
             name="event"
-            type="com.sql.projecttemplate.views.fragments.RegisterFragment" />
+            type="com.ftx.mvvm_template.views.fragments.RegisterFragment" />
 
     </data>
 
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.sql.projecttemplate.views.widgets.CustomEditText
+                <com.ftx.mvvm_template.views.widgets.CustomEditText
                     android:id="@+id/fRegister_edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 android:layout_marginTop="@dimen/spacing_standard"
                 app:passwordToggleTint="@color/colorPrimary">
 
-                <com.sql.projecttemplate.views.widgets.CustomEditText
+                <com.ftx.mvvm_template.views.widgets.CustomEditText
                     android:id="@+id/fRegister_edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 android:layout_marginTop="@dimen/spacing_standard"
                 app:passwordToggleTint="@color/colorPrimary">
 
-                <com.sql.projecttemplate.views.widgets.CustomEditText
+                <com.ftx.mvvm_template.views.widgets.CustomEditText
                     android:id="@+id/fRegister_edtRePassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             </android.support.design.widget.TextInputLayout>
 
 
-            <com.sql.projecttemplate.views.widgets.CustomButton
+            <com.ftx.mvvm_template.views.widgets.CustomButton
                 android:id="@+id/aRegister_btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
