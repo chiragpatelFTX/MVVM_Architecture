@@ -3,10 +3,9 @@ package com.ftx.mvvm_template.model.entities.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-
 /**
  * Name : LoginRequest
- *<br> Purpose :This class will keep the request parameters for login.
+ * <br> Purpose :This class will keep the request parameters for login.
  */
 public class LoginRequest {
 
@@ -15,6 +14,11 @@ public class LoginRequest {
 
     @JsonProperty("password")
     private String mPassword;
+
+    public LoginRequest(String mEmail, String mPassword) {
+        this.mEmail = mEmail;
+        this.mPassword = mPassword;
+    }
 
     public String getEmail() {
         return mEmail;

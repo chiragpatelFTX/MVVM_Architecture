@@ -37,4 +37,11 @@ public interface MvvmView {
      * @param aError error message to show user
      */
     void apiError(APIError aError);
+
+    /**
+     * To show any toast message to user
+     *
+     * @param message  message to show user
+     */
+    void toast(String message);
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
-import android.support.v7.recyclerview.extensions.DiffCallback;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,26 +26,10 @@ import com.ftx.mvvm_template.views.activities.DetailActivity;
 
 public class AlbumAdapter extends PagedListAdapter<AlbumModel, AlbumAdapter.ViewHolderUserAdapter> {
 
-    /**
-     * Name : DIFF_CALLBACK
-     * <br> Purpose : DiffCallback will check weather your data is changed or not if yes than return true other wise return
-     * false and according to this your adapter will update your record or insert new record in recycler view.
-     */
-    public static final DiffCallback<AlbumModel> ALBUM_DIFF_CALLBACK = new DiffCallback<AlbumModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull AlbumModel oldAlbumModel, @NonNull AlbumModel newAlbumModel) {
-            return oldAlbumModel.userId == newAlbumModel.userId;
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull AlbumModel oldAlbumModel, @NonNull AlbumModel newAlbumModel) {
-            return oldAlbumModel.equals(newAlbumModel);
-        }
-    };
     private Context mContext;
 
     public AlbumAdapter(Context mContext) {
-        super(ALBUM_DIFF_CALLBACK);
+        super(AlbumModel.ALBUM_DIFF_CALLBACK);
         this.mContext = mContext;
     }
 

@@ -8,9 +8,9 @@ ext {
     glideVersion = '3.8.0' // Glide is an image downloading library, Use any one fresco or glide.
     gsonVersion = '2.8.1'
     crashlyticsVersion = '2.7.1@aar'
-    archLifecycleVersion = "1.0.0-alpha9-1"
+    archLifecycleVersion = "1.1.1"
     archRoomVersion = "1.0.0-alpha9-1"
-    paggingVersion = "1.0.0-alpha1"
+        paggingVersion = "1.0.0-alpha1"
 
     appDependencies = [
             fresco             : "com.facebook.fresco:fresco:$frescoVersion",

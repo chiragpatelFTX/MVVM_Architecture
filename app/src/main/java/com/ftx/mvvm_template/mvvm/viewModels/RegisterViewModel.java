@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ftx.mvvm_template.TemplateApplication;
+import com.ftx.mvvm_template.databinding.FragmentRegisterBinding;
 import com.ftx.mvvm_template.framework.model.APIError;
 import com.ftx.mvvm_template.framework.model.ApiResponse;
 import com.ftx.mvvm_template.model.db.MyDatabase;
@@ -16,6 +17,7 @@ import com.ftx.mvvm_template.model.entities.response.RegisterResponse;
 import com.ftx.mvvm_template.model.repo.HomeRepository;
 import com.ftx.mvvm_template.model.repo.RepositoryImpl;
 import com.ftx.mvvm_template.mvvm.views.MvvmView;
+import com.ftx.mvvm_template.utils.StringUtils;
 import com.ftx.mvvm_template.utils.network.NetworkUtils;
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.mvvm.views.RegisterView;
@@ -58,6 +60,31 @@ public class RegisterViewModel extends BaseViewModel {
     }
 
 
+    public void onClickRegister() {
+        mRegView.onRegisterClicked();
+    }
+
+    /**
+     * Name : RegisterFragment validateForm
+     * <br> Purpose :
+     * This method will validate the form locally.
+     * and if any errors found then we will set errors to respected view.
+     */
+    public void validateForm(FragmentRegisterBinding mBinding) {
+        if (StringUtils.isTrimmedEmpty(mBinding.fRegisterEdtEmail.getText().toString())) {
+            mBinding.inputLayoutFirstname.setError("Please enter E-Mail Address");
+        } else if (!StringUtils.isValidEmail(mBinding.fRegisterEdtEmail.getText().toString())) {
+            mBinding.inputLayoutFirstname.setError("Please enter valid email address.");
+        } else if (StringUtils.isTrimmedEmpty(mBinding.fRegisterEdtPassword.getText().toString())) {
+            mBinding.inputLayoutPassword.setError("Please enter password");
+        } else if (!StringUtils.isEquals(mBinding.fRegisterEdtPassword.getText().toString(), mBinding.fRegisterEdtRePassword.getText().toString())) {
+            mBinding.inputLayoutRepassword.setError("Both password should be equal.");
+        } else {
+            loadRegUserResponse(mBinding.fRegisterEdtEmail.getText().toString(), mBinding.fRegisterEdtPassword.getText().toString());
+        }
+    }
+
+
     /**
      * Name : registerUser
      * <br> Purpose : This method will be called from the {@link RegisterFragment}
@@ -67,34 +94,13 @@ public class RegisterViewModel extends BaseViewModel {
      * @param sPassword : Password entered by the user.
      */
     public LiveData<ApiResponse> loadRegUserResponse(final String sEmail, final String sPassword) {
-
-        RegisterRequest mRegisterRequest = new RegisterRequest();
-        mRegisterRequest.setEmail(sEmail);
-        mRegisterRequest.setPassword(sPassword);
-
-        if (!NetworkUtils.isNetworkAvailable(mContext)) {
+        if (!NetworkUtils.isNetworkAvailable(mContext))
             mRegView.noInternetConnection(() -> loadRegUserResponse(sEmail, sPassword));
-        } else {
+        else {
             mRegView.showLoader(mContext.getString(R.string.message_loader_registering));
-            mRegLiveData.observe((LifecycleOwner) mContext, apiResponse -> {
-
-                mRegView.hideLoader();
-
-                if (apiResponse != null) {
-                    if (apiResponse.getSingalData() instanceof APIError) {
-//                      HandleError
-                        mRegView.apiError((APIError) apiResponse.getSingalData());
-                    } else {
-                        RegisterResponse mRegisterResponse = (apiResponse.getSingalData() instanceof RegisterResponse) ?
-                                (RegisterResponse) apiResponse.getSingalData() : null;
-                        if (mRegisterResponse != null) {
-                            mRegView.onUserRegistered(mRegisterResponse);
-                        } else {
-                            mRegView.apiError(new APIError(-1, mContext.getString(R.string.error_userRegistration)));
-                        }
-                    }
-                }
-            });
+            RegisterRequest mRegisterRequest = new RegisterRequest();
+            mRegisterRequest.setEmail(sEmail);
+            mRegisterRequest.setPassword(sPassword);
             mRegLiveData.addSource(
                     mHomeRepo.registerUserOnServer(mRegisterRequest), apiResponse -> mRegLiveData.setValue(apiResponse)
             );

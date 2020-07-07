@@ -1,8 +1,9 @@
 package com.ftx.mvvm_template.views.fragments;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,12 +12,12 @@ import android.view.ViewGroup;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.FragmentRegisterBinding;
+import com.ftx.mvvm_template.framework.model.APIError;
 import com.ftx.mvvm_template.model.entities.NavItemModel;
 import com.ftx.mvvm_template.model.entities.response.RegisterResponse;
 import com.ftx.mvvm_template.mvvm.viewModels.RegisterViewModel;
 import com.ftx.mvvm_template.mvvm.views.RegisterView;
 import com.ftx.mvvm_template.utils.AppLog;
-import com.ftx.mvvm_template.utils.StringUtils;
 import com.ftx.mvvm_template.views.activities.AppBaseActivity;
 
 
@@ -26,67 +27,62 @@ import com.ftx.mvvm_template.views.activities.AppBaseActivity;
  * This class is used for register fragment.
  * to show the register form to create a new member on our application.
  */
-public class RegisterFragment extends BaseFragment implements RegisterView {
+public class RegisterFragment extends BaseFragment2<FragmentRegisterBinding, RegisterViewModel> implements RegisterView {
 
-
-    private View mRootView;
-    private FragmentRegisterBinding mBinding;
     private RegisterViewModel mRegViewModel;
     private Context mContext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_register;
+    }
+
+    @Override
+    public RegisterViewModel getViewModel() {
+        if (mRegViewModel == null)
+            mRegViewModel = (RegisterViewModel) getViewModel(RegisterViewModel.class)
+                    .inIt(mContext, this);
+        return mRegViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        mContext = getActivity();
-
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false);
-        mRootView = mBinding.getRoot();
-        mBinding.setEvent(this);
-
-        return mRootView;
+        super.onCreateView(inflater, container, savedInstanceState);
+        return getmViewDataBinding().getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mRegViewModel = (RegisterViewModel) getViewModel(RegisterViewModel.class)
-                .inIt(mContext, this);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mRegViewModel.regLiveData().observe((LifecycleOwner) mContext, apiResponse -> {
+            hideLoader();
+            if (apiResponse != null) {
+                if (apiResponse.getSingalData() instanceof APIError) {
+//                      HandleError
+                    apiError((APIError) apiResponse.getSingalData());
+                } else {
+                    RegisterResponse mRegisterResponse = (apiResponse.getSingalData() instanceof RegisterResponse) ?
+                            (RegisterResponse) apiResponse.getSingalData() : null;
+                    if (mRegisterResponse != null) {
+                        onUserRegistered(mRegisterResponse);
+                    } else {
+                        apiError(new APIError(-1, mContext.getString(R.string.error_userRegistration)));
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-    }
-
-    public void onClickRegister() {
-        validateForm();
-    }
-
-
-    /**
-     * Name : RegisterFragment validateForm
-     * <br> Purpose :
-     * This method will validate the form locally.
-     * and if any errors found then we will set errors to respected view.
-     */
-    private void validateForm() {
-        if (StringUtils.isTrimmedEmpty(mBinding.fRegisterEdtEmail.getText().toString())) {
-            mBinding.inputLayoutFirstname.setError("Please enter E-Mail Address");
-        } else if (!StringUtils.isValidEmail(mBinding.fRegisterEdtEmail.getText().toString())) {
-            mBinding.inputLayoutFirstname.setError("Please enter valid email address.");
-        } else if (StringUtils.isTrimmedEmpty(mBinding.fRegisterEdtPassword.getText().toString())) {
-            mBinding.inputLayoutPassword.setError("Please enter password");
-        } else if (!StringUtils.isEquals(mBinding.fRegisterEdtPassword.getText().toString(), mBinding.fRegisterEdtRePassword.getText().toString())) {
-            mBinding.inputLayoutRepassword.setError("Both password should be equal.");
-        } else {
-            mRegViewModel.loadRegUserResponse(mBinding.fRegisterEdtEmail.getText().toString(), mBinding.fRegisterEdtPassword.getText().toString());
-        }
     }
 
 
@@ -98,7 +94,6 @@ public class RegisterFragment extends BaseFragment implements RegisterView {
      *
      * @param mResponse :  Object of {@link RegisterResponse}
      */
-    @Override
     public void onUserRegistered(RegisterResponse mResponse) {
         AppLog.e(TAG, "RegisterResponse : " + mResponse.getToken());
         Log.d(TAG, "User registerd successfully");
@@ -111,5 +106,10 @@ public class RegisterFragment extends BaseFragment implements RegisterView {
         ((AppBaseActivity) getActivity()).clearAllTopFragment();
 
         ((AppBaseActivity) getActivity()).setFragment(mChangeAssessment);
+    }
+
+    @Override
+    public void onRegisterClicked() {
+        mRegViewModel.validateForm(getmViewDataBinding());
     }
 }

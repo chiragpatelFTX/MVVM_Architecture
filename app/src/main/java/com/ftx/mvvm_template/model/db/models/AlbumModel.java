@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+import android.support.v7.recyclerview.extensions.DiffCallback;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -62,4 +64,21 @@ public class AlbumModel {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    /**
+     * Name : DIFF_CALLBACK
+     * <br> Purpose : DiffCallback will check weather your data is changed or not if yes than return true other wise return
+     * false and according to this your adapter will update your record or insert new record in recycler view.
+     */
+    public static final DiffCallback<AlbumModel> ALBUM_DIFF_CALLBACK = new DiffCallback<AlbumModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull AlbumModel oldAlbumModel, @NonNull AlbumModel newAlbumModel) {
+            return oldAlbumModel.userId == newAlbumModel.userId;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull AlbumModel oldAlbumModel, @NonNull AlbumModel newAlbumModel) {
+            return oldAlbumModel.equals(newAlbumModel);
+        }
+    };
 }

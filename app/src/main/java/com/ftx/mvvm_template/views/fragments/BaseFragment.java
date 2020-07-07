@@ -13,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ftx.mvvm_template.framework.model.APIError;
+import com.ftx.mvvm_template.mvvm.views.BaseView;
 import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.CommonUtils;
 import com.ftx.mvvm_template.utils.StringUtils;
 import com.ftx.mvvm_template.views.listeners.NetworkRetryCallback;
-import com.ftx.mvvm_template.mvvm.views.BaseView;
 
 
 /**
@@ -144,6 +144,11 @@ public class BaseFragment extends Fragment implements BaseView {
     public void apiError(APIError aError) {
         if (aError != null && !StringUtils.isTrimmedEmpty(aError.getStatusMessage()))
             Toast.makeText(getCurrentContext(), aError.getStatusMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void toast(String message) {
+        Toast.makeText(getCurrentContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 

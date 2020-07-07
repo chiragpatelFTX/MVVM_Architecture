@@ -1,7 +1,6 @@
 package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,11 +19,8 @@ import com.ftx.mvvm_template.views.adapters.AlbumAdapter;
  * <br> Purpose : Display AlbumModel list and user can navigate to detail screen on item click
  */
 
-public class AlbumFragment extends BaseFragment implements HomeView {
+public class AlbumFragment extends BaseFragment2<FragmentAlbumsBinding, HomeViewModel> implements HomeView {
 
-
-    private View mRootView;
-    private FragmentAlbumsBinding mBinding;
     private HomeViewModel mHomeViewModel;
     private Context mContext;
     private AlbumAdapter mAlbumAdapter;
@@ -36,19 +32,26 @@ public class AlbumFragment extends BaseFragment implements HomeView {
         mContext = getActivity();
     }
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_albums;
+    }
+
+    @Override
+    public HomeViewModel getViewModel() {
+        if (mHomeViewModel == null)
+            mHomeViewModel = (HomeViewModel) getViewModel(HomeViewModel.class).inIt(mContext, this);
+        return mHomeViewModel;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_albums, container, false);
-        mRootView = mBinding.getRoot();
-        mBinding.setEvent(this);
-
+        super.onCreateView(inflater, container, savedInstanceState);
         mAlbumAdapter = new AlbumAdapter(mContext);
-        mBinding.rclAlbumData.setLayoutManager(new LinearLayoutManager(mContext));
-        mBinding.rclAlbumData.setAdapter(mAlbumAdapter);
-
-        return mRootView;
-
+        getmViewDataBinding().rclAlbumData.setLayoutManager(new LinearLayoutManager(mContext));
+        getmViewDataBinding().rclAlbumData.setAdapter(mAlbumAdapter);
+        return getmViewDataBinding().getRoot();
     }
 
     @Override
@@ -56,13 +59,13 @@ public class AlbumFragment extends BaseFragment implements HomeView {
         super.onActivityCreated(savedInstanceState);
 
         //Get ViewModel class instance
-        mHomeViewModel = (HomeViewModel) getViewModel(HomeViewModel.class).inIt(mContext, this);
 
         //Call Method from viewModel class for getAlbum list from server
         mHomeViewModel.loadAlbumResponse();
 
         //Observe LiveData response and get updated data and also update UI .
         mHomeViewModel.getPagedAlbumList().observe(this, albumList -> {
+            hideLoader();
             if (mAlbumAdapter != null) {
                 mAlbumAdapter.setList(albumList);
             }
