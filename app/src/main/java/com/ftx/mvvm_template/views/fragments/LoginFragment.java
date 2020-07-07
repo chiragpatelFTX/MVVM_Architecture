@@ -2,7 +2,6 @@ package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,15 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.ftx.mvvm_template.R;
-import com.ftx.mvvm_template.databinding.FragmentLoginBinding;
-import com.ftx.mvvm_template.framework.model.APIError;
-import com.ftx.mvvm_template.model.entities.NavItemModel;
-import com.ftx.mvvm_template.model.entities.response.LoginResponse;
-import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
-import com.ftx.mvvm_template.mvvm.views.LoginView;
-import com.ftx.mvvm_template.utils.AppLog;
-import com.ftx.mvvm_template.views.activities.AppBaseActivity;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -30,6 +21,15 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.ftx.mvvm_template.R;
+import com.ftx.mvvm_template.databinding.FragmentLoginBinding;
+import com.ftx.mvvm_template.framework.model.APIError;
+import com.ftx.mvvm_template.model.entities.NavItemModel;
+import com.ftx.mvvm_template.model.entities.response.LoginResponse;
+import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
+import com.ftx.mvvm_template.mvvm.views.LoginView;
+import com.ftx.mvvm_template.utils.AppLog;
+import com.ftx.mvvm_template.views.activities.AppBaseActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -47,14 +47,12 @@ import java.util.Arrays;
  * which override all the methods of the login view. and also navigates
  * per the login response and if there are any errors then we will display that error.
  */
-public class LoginFragment extends BaseFragment implements LoginView {
+public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginViewModel> implements LoginView {
 
     private static final String[] FBPermission = {"email", "public_profile", "user_birthday"};
 
     private static final int RC_SIGN_IN = 101;
-    FragmentLoginBinding mBinding;
     LoginViewModel mLoginViewModel;
-    private View mRootView;
     // FACEBOOK
     private CallbackManager mCallbackManager;
     private AccessToken mFacebookToken;
@@ -62,11 +60,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private GoogleApiClient mGoogleApiClient;
     private Context mContext;
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_login;
+    }
+
+    @Override
+    public LoginViewModel getViewModel() {
+        if (mLoginViewModel == null)
+            mLoginViewModel = (LoginViewModel) getViewModel(LoginViewModel.class).inIt(mContext, this);
+        return mLoginViewModel;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-//        mLoginPresenter = new LoginPresenter(this);
-
         mContext = getActivity();
         super.onCreate(savedInstanceState);
     }
@@ -74,10 +81,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
-        mRootView = mBinding.getRoot();
-        mBinding.setEvent(this);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // For Facebook
         mCallbackManager = CallbackManager.Factory.create();
@@ -93,7 +97,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        return mRootView;
+        return getmViewDataBinding().getRoot();
     }
 
     @Override
