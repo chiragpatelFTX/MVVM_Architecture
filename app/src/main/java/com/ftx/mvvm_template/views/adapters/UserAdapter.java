@@ -4,7 +4,6 @@ import android.arch.paging.PagedListAdapter;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
-import android.support.v7.recyclerview.extensions.DiffCallback;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,26 +23,10 @@ import com.ftx.mvvm_template.model.db.models.UserModel;
 
 public class UserAdapter extends PagedListAdapter<UserModel, UserAdapter.ViewHolderUserAdapter> {
 
-    /**
-     * Name : DIFF_CALLBACK
-     * <br> Purpose : DiffCallback will check weather your data is changed or not if yes than return true other wise return
-     * false and according to this your adapter will update your record or insert new record in recycler view.
-     */
-    public static final DiffCallback<UserModel> USER_DIFF_CALLBACK = new DiffCallback<UserModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull UserModel oldUserModel, @NonNull UserModel newUserModel) {
-            return oldUserModel.id == newUserModel.id;
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull UserModel oldUserModel, @NonNull UserModel newUserModel) {
-            return oldUserModel.equals(newUserModel);
-        }
-    };
     private Context mContext;
 
     public UserAdapter(Context mContext) {
-        super(USER_DIFF_CALLBACK);
+        super(UserModel.USER_DIFF_CALLBACK);
         this.mContext = mContext;
     }
 

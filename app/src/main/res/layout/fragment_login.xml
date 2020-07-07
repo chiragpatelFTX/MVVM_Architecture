@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="event"
-            type="com.ftx.mvvm_template.views.fragments.LoginFragment" />
-
+            name="viewModel"
+            type="com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel" />
     </data>
 
     <RelativeLayout
@@ -61,7 +61,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/spacing_control"
             android:background="@color/colorPrimary"
-            android:onClick="@{ () -> event.onClickLogin()}"
+            android:onClick="@{ () -> viewModel.onLoginClicked()}"
             android:text="@string/btn_alogin_login"
             android:textColor="@android:color/white" />
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="@color/colorPrimaryDark"
-                android:onClick="@{ () -> event.onClickFacebookLogin()}"
+                android:onClick="@{ () -> viewModel.onFacebookClicked()}"
                 android:text="@string/btn_alogin_facebook"
                 android:textColor="@android:color/white" />
 
@@ -91,7 +91,7 @@
                 android:layout_marginLeft="@dimen/spacing_control"
                 android:layout_weight="0.5"
                 android:background="@color/colorPrimaryDark"
-                android:onClick="@{ () -> event.onClickGmailLogin()}"
+                android:onClick="@{()->viewModel.onGmailClicked()}"
                 android:text="@string/btn_alogin_google"
                 android:textColor="@android:color/white" />
         </LinearLayout>
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/design_snackbar_background_color"
-            android:onClick="@{ () -> event.onClickRegister()}"
+            android:onClick="@{ () -> viewModel.onClickRegister()}"
             android:text="@string/btn_flogin_register"
             android:textColor="@android:color/white" />
 

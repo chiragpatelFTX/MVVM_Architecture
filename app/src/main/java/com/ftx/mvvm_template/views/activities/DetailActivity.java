@@ -184,4 +184,9 @@ public class DetailActivity extends AppBaseActivity implements DetailView {
     public void apiError(APIError aError) {
 
     }
+
+    @Override
+    public void toast(String message) {
+
+    }
 }

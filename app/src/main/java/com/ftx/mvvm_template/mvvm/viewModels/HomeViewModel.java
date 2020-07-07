@@ -1,6 +1,5 @@
 package com.ftx.mvvm_template.mvvm.viewModels;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModel;
@@ -104,7 +103,6 @@ public class HomeViewModel extends BaseViewModel {
             mHomeView.noInternetConnection(() -> loadAlbumResponse());
         } else {
             mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
-            mAlbumLiveData.observe((LifecycleOwner) mContext, apiResponse -> mHomeView.hideLoader());
             mAlbumLiveData.addSource(
                     mHomeRepo.getAlbumList(), apiResponse -> new DatabaseAsync<ApiResponse>(mContext,
                             mDatabase,
@@ -131,6 +129,7 @@ public class HomeViewModel extends BaseViewModel {
     /**
      * Name : loadUserResponse
      * <br> Purpose : This method will be called to get the user list from API
+     *
      * @return
      */
     public LiveData<ApiResponse> loadUserResponse(int pageId) {
@@ -138,7 +137,6 @@ public class HomeViewModel extends BaseViewModel {
             mHomeView.noInternetConnection(() -> loadUserResponse(pageId));
         } else {
             mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_users));
-            mUserLiveData.observe((LifecycleOwner) mContext, apiResponse -> mHomeView.hideLoader());
             mUserLiveData.addSource(
                     mHomeRepo.getUserList(pageId), apiResponse -> new DatabaseAsync<ApiResponse>(mContext,
                             mDatabase,

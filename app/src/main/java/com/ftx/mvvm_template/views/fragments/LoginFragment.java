@@ -2,23 +2,16 @@ package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.ftx.mvvm_template.R;
-import com.ftx.mvvm_template.databinding.FragmentLoginBinding;
-import com.ftx.mvvm_template.framework.model.APIError;
-import com.ftx.mvvm_template.model.entities.NavItemModel;
-import com.ftx.mvvm_template.model.entities.response.LoginResponse;
-import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
-import com.ftx.mvvm_template.mvvm.views.LoginView;
-import com.ftx.mvvm_template.utils.AppLog;
-import com.ftx.mvvm_template.utils.StringUtils;
-import com.ftx.mvvm_template.views.activities.AppBaseActivity;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -28,6 +21,15 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.ftx.mvvm_template.R;
+import com.ftx.mvvm_template.databinding.FragmentLoginBinding;
+import com.ftx.mvvm_template.framework.model.APIError;
+import com.ftx.mvvm_template.model.entities.NavItemModel;
+import com.ftx.mvvm_template.model.entities.response.LoginResponse;
+import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
+import com.ftx.mvvm_template.mvvm.views.LoginView;
+import com.ftx.mvvm_template.utils.AppLog;
+import com.ftx.mvvm_template.views.activities.AppBaseActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -45,14 +47,12 @@ import java.util.Arrays;
  * which override all the methods of the login view. and also navigates
  * per the login response and if there are any errors then we will display that error.
  */
-public class LoginFragment extends BaseFragment implements LoginView {
+public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginViewModel> implements LoginView {
 
     private static final String[] FBPermission = {"email", "public_profile", "user_birthday"};
 
     private static final int RC_SIGN_IN = 101;
-    FragmentLoginBinding mBinding;
     LoginViewModel mLoginViewModel;
-    private View mRootView;
     // FACEBOOK
     private CallbackManager mCallbackManager;
     private AccessToken mFacebookToken;
@@ -60,11 +60,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private GoogleApiClient mGoogleApiClient;
     private Context mContext;
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_login;
+    }
+
+    @Override
+    public LoginViewModel getViewModel() {
+        if (mLoginViewModel == null)
+            mLoginViewModel = (LoginViewModel) getViewModel(LoginViewModel.class).inIt(mContext, this);
+        return mLoginViewModel;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-//        mLoginPresenter = new LoginPresenter(this);
-
         mContext = getActivity();
         super.onCreate(savedInstanceState);
     }
@@ -72,10 +81,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
-        mRootView = mBinding.getRoot();
-        mBinding.setEvent(this);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // For Facebook
         mCallbackManager = CallbackManager.Factory.create();
@@ -91,15 +97,27 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        return mRootView;
+        return getmViewDataBinding().getRoot();
     }
 
-
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLoginViewModel.getApiResponse().observe(this, apiResponse -> {
+            hideLoader();
+            if (apiResponse == null) return;
+            if (apiResponse.getSingalData() instanceof APIError) {
+//                      HandleError
+                apiError((APIError) apiResponse.getSingalData());
+            } else {
+                LoginResponse mLoginResponse = apiResponse.getSingalData() instanceof LoginResponse ? (LoginResponse) apiResponse.getSingalData() : new LoginResponse();
+                if (mLoginResponse != null && !TextUtils.isEmpty(mLoginResponse.getToken())) {
+                    Log.d(TAG, mLoginResponse.getToken());
+                    onLoginSuccess();
+                }
+            }
 
-        mLoginViewModel = (LoginViewModel) getViewModel(LoginViewModel.class).inIt(mContext, this);
+        });
     }
 
     /**
@@ -160,11 +178,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
      * <br> Purpose :
      * This method will be executed by the presenter when we get the login response.
      * If login is success then we will navigate to home fragment.
-     *
-     * @param mResponse : Object of login response.
      */
-    @Override
-    public void onLoginSuccess(LoginResponse mResponse) {
+    public void onLoginSuccess() {
 
         NavItemModel mChangeAssessment = new NavItemModel(
                 R.mipmap.ic_launcher,
@@ -174,6 +189,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         ((AppBaseActivity) getActivity()).clearAllTopFragment();
         ((AppBaseActivity) getActivity()).setFragment(mChangeAssessment);
+    }
+
+    @Override
+    public void onLoginClicked() {
+        mLoginViewModel.validateForm(getmViewDataBinding());
     }
 
     /**
@@ -188,17 +208,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     /**
-     * Name : onClickLogin
-     * <br> Purpose : Validate data for Login webservice
-     */
-    public void onClickLogin() {
-        validateForm();
-    }
-
-    /**
      * Name : onClickFacebookLogin
      * <br> Purpose : To get permission if not has and than this method will be used for get FacebookUser detail.
      */
+    @Override
     public void onClickFacebookLogin() {
         if (mFacebookToken == null)
             LoginManager.getInstance().logInWithReadPermissions(LoginFragment.this, Arrays.asList(FBPermission));
@@ -210,6 +223,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
      * Name : onClickGmailLogin
      * <br> Purpose : This method will initiate google authentication and will return result in onActivityResult method.
      */
+    @Override
     public void onClickGmailLogin() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -219,6 +233,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
      * Name : onClickRegister
      * <br> Purpose : To redirect user to Register Screen
      */
+    @Override
     public void onClickRegister() {
         NavItemModel mChangeAssessment = new NavItemModel(
                 R.mipmap.ic_launcher,
@@ -226,26 +241,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 RegisterFragment.class,
                 RegisterFragment.class.getSimpleName(), null);
         ((AppBaseActivity) getActivity()).setFragment(mChangeAssessment);
-    }
-
-
-    /**
-     * Name : LoginFragment validateForm
-     * <br> Purpose :
-     * This method will first locally validate the login form.
-     * and if there are any local errors then we will set error to respected
-     * view.
-     */
-    private void validateForm() {
-        if (StringUtils.isTrimmedEmpty(mBinding.aLoginEdtUsername.getText().toString())) {
-            mBinding.inputLayoutUsername.setError(getString(R.string.error_enterEmailAddress));
-        } else if (!StringUtils.isValidEmail(mBinding.aLoginEdtUsername.getText().toString())) {
-            mBinding.inputLayoutUsername.setError(getString(R.string.error_enterValidEmailAddress));
-        } else if (StringUtils.isTrimmedEmpty(mBinding.aLoginEdtPassword.getText().toString())) {
-            mBinding.inputLayoutPassword.setError(getString(R.string.error_enterPassword));
-        } else {
-            mLoginViewModel.loginUser(mBinding.aLoginEdtUsername.getText().toString(), mBinding.aLoginEdtPassword.getText().toString());
-        }
     }
 
     @Override

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="event"
-            type="com.ftx.mvvm_template.views.fragments.UserFragment" />
+            name="viewModel"
+            type="com.ftx.mvvm_template.mvvm.viewModels.HomeViewModel" />
 
     </data>
 
@@ -19,7 +20,9 @@
             android:id="@+id/rcl_UserData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            tools:listitem="@layout/user_adapter" />
 
     </LinearLayout>
 

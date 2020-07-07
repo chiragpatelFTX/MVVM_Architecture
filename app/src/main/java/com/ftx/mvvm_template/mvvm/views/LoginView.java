@@ -1,6 +1,5 @@
 package com.ftx.mvvm_template.mvvm.views;
 
-import com.ftx.mvvm_template.model.entities.response.LoginResponse;
 import com.ftx.mvvm_template.views.fragments.LoginFragment;
 
 
@@ -13,5 +12,11 @@ import com.ftx.mvvm_template.views.fragments.LoginFragment;
  */
 public interface LoginView extends BaseView {
 
-    void onLoginSuccess(LoginResponse mResponse);
+    void onLoginClicked();
+
+    void onClickFacebookLogin();
+
+    void onClickGmailLogin();
+
+    void onClickRegister();
 }

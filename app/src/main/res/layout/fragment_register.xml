@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="event"
-            type="com.ftx.mvvm_template.views.fragments.RegisterFragment" />
+            name="viewmodel"
+            type="com.ftx.mvvm_template.mvvm.viewModels.RegisterViewModel" />
 
     </data>
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_standard"
                 android:background="@color/colorPrimary"
-                android:onClick="@{() -> event.onClickRegister()}"
+                android:onClick="@{() -> viewmodel.onClickRegister()}"
                 android:text="@string/btn_aregister_register"
                 android:textColor="@android:color/white" />
 

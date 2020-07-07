@@ -12,5 +12,5 @@ import com.ftx.mvvm_template.views.fragments.RegisterFragment;
  */
 public interface RegisterView extends BaseView {
 
-    void onUserRegistered(RegisterResponse mResponse);
+    void onRegisterClicked();
 }

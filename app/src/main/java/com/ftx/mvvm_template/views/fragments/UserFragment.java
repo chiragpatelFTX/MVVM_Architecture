@@ -1,7 +1,6 @@
 package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,13 +19,23 @@ import com.ftx.mvvm_template.views.adapters.UserAdapter;
  * <br> Purpose : Display UserModel list and user can navigate to detail screen on item click
  */
 
-public class UserFragment extends BaseFragment implements HomeView {
+public class UserFragment extends BaseFragment2<FragmentUsersBinding, HomeViewModel> implements HomeView {
 
-    private View mRootView;
-    private FragmentUsersBinding mBinding;
     private HomeViewModel mHomeViewModel;
     private Context mContext;
     private UserAdapter mUserAdapter;
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_users;
+    }
+
+    @Override
+    public HomeViewModel getViewModel() {
+        if (mHomeViewModel == null)
+            mHomeViewModel = (HomeViewModel) getViewModel(HomeViewModel.class).inIt(mContext, this);
+        return mHomeViewModel;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,15 +46,12 @@ public class UserFragment extends BaseFragment implements HomeView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_users, container, false);
-        mRootView = mBinding.getRoot();
-        mBinding.setEvent(this);
-
+        super.onCreateView(inflater, container, savedInstanceState);
         mUserAdapter = new UserAdapter(mContext);
-        mBinding.rclUserData.setLayoutManager(new LinearLayoutManager(mContext));
-        mBinding.rclUserData.setAdapter(mUserAdapter);
+        getmViewDataBinding().rclUserData.setLayoutManager(new LinearLayoutManager(mContext));
+        getmViewDataBinding().rclUserData.setAdapter(mUserAdapter);
 
-        return mRootView;
+        return getmViewDataBinding().getRoot();
     }
 
     @Override
@@ -53,13 +59,14 @@ public class UserFragment extends BaseFragment implements HomeView {
         super.onActivityCreated(savedInstanceState);
 
         //Get ViewModel class instance
-        mHomeViewModel = (HomeViewModel) getViewModel(HomeViewModel.class).inIt(mContext, this);
+
 
         //Call Method from viewModel class for getUser list from server
 //        mHomeViewModel.loadUserResponse();
 
         //Observe LiveData response and get updated data and also update UI .
         mHomeViewModel.getPagedUserList().observe(this, userList -> {
+            hideLoader();
             if (mUserAdapter != null) {
                 mUserAdapter.setList(userList);
             }

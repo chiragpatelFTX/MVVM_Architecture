@@ -4,15 +4,20 @@ import android.app.Dialog;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ftx.mvvm_template.BR;
 import com.ftx.mvvm_template.framework.model.APIError;
+import com.ftx.mvvm_template.mvvm.viewModels.BaseViewModel;
 import com.ftx.mvvm_template.mvvm.views.BaseView;
 import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.CommonUtils;
@@ -27,22 +32,36 @@ import com.ftx.mvvm_template.views.listeners.NetworkRetryCallback;
  * it contains the method which are implemented by the base view as well as
  * get current context etc...
  */
-public class BaseFragment extends Fragment implements BaseView {
+public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseViewModel> extends Fragment implements BaseView {
 
     String TAG = "BaseFragment";
     private Dialog mProgressDialog;
+    private T mViewDataBinding;
+    private V mViewModel;
+    private View mRootView;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public T getmViewDataBinding() {
+        return mViewDataBinding;
     }
 
-    @Nullable
+    @LayoutRes
+    public abstract int getLayoutId();
+
+    public abstract V getViewModel();
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        AppLog.e(TAG, "onCreateView");
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mViewDataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
+        mRootView = mViewDataBinding.getRoot();
+        return mRootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewDataBinding.setVariable(BR.viewModel, getViewModel());
+        mViewDataBinding.setLifecycleOwner(this);
+        mViewDataBinding.executePendingBindings();
     }
 
     @Override
@@ -58,7 +77,7 @@ public class BaseFragment extends Fragment implements BaseView {
     }
 
     public <T extends ViewModel> T getViewModel(Class<T> viewModelClass) {
-        return ViewModelProviders.of(this).get(viewModelClass);
+        return ViewModelProviders.of(this/*, getAppInstance().getViewModelFactory()*/).get(viewModelClass);
     }
 
     /**
@@ -150,6 +169,4 @@ public class BaseFragment extends Fragment implements BaseView {
     public void toast(String message) {
         Toast.makeText(getCurrentContext(), message, Toast.LENGTH_SHORT).show();
     }
-
-
 }

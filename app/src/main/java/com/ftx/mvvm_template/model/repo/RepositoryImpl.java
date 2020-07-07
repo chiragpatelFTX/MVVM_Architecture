@@ -25,6 +25,14 @@ import retrofit2.Response;
 
 public class RepositoryImpl implements HomeRepository {
 
+    private static RepositoryImpl newsRepository;
+
+    public static RepositoryImpl getInstance() {
+        if (newsRepository == null) {
+            newsRepository = new RepositoryImpl();
+        }
+        return newsRepository;
+    }
 
     private RestApis mApiService;
 
@@ -40,7 +48,7 @@ public class RepositoryImpl implements HomeRepository {
      * @return LiveData<ApiResponse>  : will return liveData of ApiResponse
      */
 
-    public LiveData<ApiResponse> loginUserOnServer(LoginRequest aRequest) {
+    public MutableLiveData<ApiResponse> loginUserOnServer(LoginRequest aRequest) {
 
         final MutableLiveData<ApiResponse> liveData = new MutableLiveData<>();
 
