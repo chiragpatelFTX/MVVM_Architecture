@@ -20,7 +20,6 @@ public class BindingUtils {
 
     @BindingAdapter("adapter")
     public static void bindAdapter(RecyclerView view, RecyclerView.Adapter<RecyclerView.ViewHolder> baseAdapter) {
-        //view.setLayoutManager(new LinearLayoutManager(view.getContext()));
         view.setAdapter(baseAdapter);
     }
 

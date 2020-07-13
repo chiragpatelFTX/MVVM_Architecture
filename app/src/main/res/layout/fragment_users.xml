@@ -6,9 +6,9 @@
 
     <data>
 
-       <!-- <variable
+        <variable
             name="adapter"
-            type="com.ftx.mvvm_template.views.adapters.UserAdapter" />-->
+            type="com.ftx.mvvm_template.views.adapters.UserAdapter" />
 
         <variable
             name="viewModel"
@@ -27,11 +27,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
+            app:adapter="@{adapter}"
+            app:adapterList="@{viewModel.getPagedUserList()}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/user_adapter" />
 
     </LinearLayout>
-    <!--    app:adapter="@{adapter}"
-        app:adapterList="@{viewModel.getPagedUserList()}"-->
-
 </layout>

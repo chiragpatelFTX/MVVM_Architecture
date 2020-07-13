@@ -4,10 +4,8 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PageKeyedDataSource;
 import androidx.paging.PagedList;
 
 import com.ftx.mvvm_template.R;
@@ -61,14 +59,8 @@ public class HomeViewModel extends BaseViewModel {
 
         pagedAlbumList = new LivePagedListBuilder(mDatabase.albumDao().getPagedAlbumList(), /* page size */ 10).build();
 
-        //getting our data source factory
-        ItemDataSourceFactory itemDataSourceFactory = new ItemDataSourceFactory();
-
-        //getting the live data source from data source factory
-        MutableLiveData<PageKeyedDataSource<Integer, UserModel>> liveDataSource = itemDataSourceFactory.getItemLiveDataSource();
-
         //Building the paged list
-        pagedUserList = new LivePagedListBuilder(itemDataSourceFactory,
+        pagedUserList = new LivePagedListBuilder(new ItemDataSourceFactory(),
                 new PagedList.Config.Builder()
                         .setEnablePlaceholders(false)
                         .setPageSize(10).build())
@@ -99,7 +91,7 @@ public class HomeViewModel extends BaseViewModel {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             mHomeView.noInternetConnection(() -> loadAlbumResponse());
         } else {
-            mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
+            // mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
             mAlbumLiveData.addSource(
                     mHomeRepo.getAlbumList(), apiResponse -> {
                         mHomeView.hideLoader();
