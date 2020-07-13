@@ -8,9 +8,9 @@ ext {
     glideVersion = '3.8.0' // Glide is an image downloading library, Use any one fresco or glide.
     gsonVersion = '2.8.1'
     crashlyticsVersion = '2.7.1@aar'
-    archLifecycleVersion = "1.1.1"
-    archRoomVersion = "1.0.0-alpha9-1"
-        paggingVersion = "1.0.0-alpha1"
+    archLifecycleVersion = "2.0.0"
+    archRoomVersion = "2.0.0"
+    paggingVersion = "2.0.0"
 
     appDependencies = [
             fresco             : "com.facebook.fresco:fresco:$frescoVersion",
@@ -21,17 +21,17 @@ ext {
 
             glide              : "com.github.bumptech.glide:glide:$glideVersion",
 
-            lifecycle          : "android.arch.lifecycle:extensions:$archLifecycleVersion",
-            lifecycleCompiler  : "android.arch.lifecycle:compiler:$archLifecycleVersion",
-            room            : "android.arch.persistence.room:runtime:$archRoomVersion",
-            roomCompiler    : "android.arch.persistence.room:compiler:$archRoomVersion",
-            pagging         : "android.arch.paging:runtime:$paggingVersion",
+            lifecycle          : "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion",
+            lifecycleCompiler  : "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion",
+            room            : "androidx.room:room-runtime:$archRoomVersion",
+            roomCompiler    : "androidx.room:room-compiler:$archRoomVersion",
+            pagging         : "androidx.paging:paging-runtime:$paggingVersion",
 
             // google support libraries
-            appCompat            : "com.android.support:appcompat-v7:$supportLibVersion",
+            appCompat            : 'androidx.appcompat:appcompat:1.0.0',
 //            supportAnnotation    : "com.android.support:support-annotations:$supportLibVersion",
-            recyclerviewLibrary  : "com.android.support:recyclerview-v7:$supportLibVersion",
-            design               : "com.android.support:design:$supportLibVersion",
+            recyclerviewLibrary  : 'androidx.recyclerview:recyclerview:1.1.0',
+            design               : 'com.google.android.material:material:1.0.0',
 
             // retrofit and its supporting libraries
             retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
@@ -47,9 +47,6 @@ ext {
             releaseLeakCanary    : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
 
             imagepicker          : "com.kbeanie:multipicker:1.1.31@aar",
-
-            lifecycle          : "android.arch.lifecycle:extensions:$archLifecycleVersion",
-            lifecycleCompiler  : "android.arch.lifecycle:compiler:$archLifecycleVersion",
 
 //            gson    : "com.google.code.gson:gson:$gsonVersion",
             crashlytics : "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion",

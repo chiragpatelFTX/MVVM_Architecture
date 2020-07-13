@@ -1,7 +1,9 @@
 package com.ftx.mvvm_template;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
+
+import androidx.room.Room;
+
 import com.facebook.FacebookSdk;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,12 +1,14 @@
 package com.ftx.mvvm_template.mvvm.viewModels;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.paging.DataSource;
-import android.arch.paging.LivePagedListProvider;
-import android.arch.paging.PagedList;
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PageKeyedDataSource;
+import androidx.paging.PagedList;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.TemplateApplication;
@@ -16,6 +18,7 @@ import com.ftx.mvvm_template.model.db.models.AlbumModel;
 import com.ftx.mvvm_template.model.db.models.UserModel;
 import com.ftx.mvvm_template.model.repo.HomeRepository;
 import com.ftx.mvvm_template.model.repo.RepositoryImpl;
+import com.ftx.mvvm_template.model.rest.ItemDataSourceFactory;
 import com.ftx.mvvm_template.model.rest.TDataSource;
 import com.ftx.mvvm_template.mvvm.views.HomeView;
 import com.ftx.mvvm_template.mvvm.views.MvvmView;
@@ -56,26 +59,20 @@ public class HomeViewModel extends BaseViewModel {
         mUserLiveData = new MediatorLiveData<>();
         mHomeRepo = new RepositoryImpl();
 
-        pagedAlbumList = mDatabase.albumDao().getPagedAlbumList().create(
-                0,          // initial load position
-                new PagedList.Config.Builder()
-                        .setPageSize(10)
-                        .setPrefetchDistance(9)
-                        .build());
+        pagedAlbumList = new LivePagedListBuilder(mDatabase.albumDao().getPagedAlbumList(), /* page size */ 10).build();
 
+        //getting our data source factory
+        ItemDataSourceFactory itemDataSourceFactory = new ItemDataSourceFactory();
 
-        pagedUserList = new LivePagedListProvider<Integer, UserModel>() {
-            @Override
-            protected DataSource<Integer, UserModel> createDataSource() {
-                tDataSource = new TDataSource();
-                return tDataSource;
-            }
-        }.create(0,         // initial load position
+        //getting the live data source from data source factory
+        MutableLiveData<PageKeyedDataSource<Integer, UserModel>> liveDataSource = itemDataSourceFactory.getItemLiveDataSource();
+
+        //Building the paged list
+        pagedUserList = new LivePagedListBuilder(itemDataSourceFactory,
                 new PagedList.Config.Builder()
                         .setEnablePlaceholders(false)
-                        .setPageSize(3)
-//                                    .setInitialLoadSizeHint(9)
-                        .build());
+                        .setPageSize(10).build())
+                .build();
 
 
         return super.inIt(mContext, mvpView);
@@ -98,21 +95,23 @@ public class HomeViewModel extends BaseViewModel {
      *
      * @return
      */
-    public LiveData<ApiResponse> loadAlbumResponse() {
+    public void loadAlbumResponse() {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             mHomeView.noInternetConnection(() -> loadAlbumResponse());
         } else {
             mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
             mAlbumLiveData.addSource(
-                    mHomeRepo.getAlbumList(), apiResponse -> new DatabaseAsync<ApiResponse>(mContext,
-                            mDatabase,
-                            apiResponse,
-                            Constants.Database.INSERT_ALBUMLIST,
-                            result -> mAlbumLiveData.setValue(apiResponse)
-                    ).execute()
+                    mHomeRepo.getAlbumList(), apiResponse -> {
+                        mHomeView.hideLoader();
+                        new DatabaseAsync<ApiResponse>(mContext,
+                                mDatabase,
+                                apiResponse,
+                                Constants.Database.INSERT_ALBUMLIST,
+                                result -> mAlbumLiveData.setValue(apiResponse)
+                        ).execute();
+                    }
             );
         }
-        return mAlbumLiveData;
     }
 
     /**
@@ -132,21 +131,22 @@ public class HomeViewModel extends BaseViewModel {
      *
      * @return
      */
-    public LiveData<ApiResponse> loadUserResponse(int pageId) {
+    public void loadUserResponse(int pageId) {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             mHomeView.noInternetConnection(() -> loadUserResponse(pageId));
         } else {
             mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_users));
             mUserLiveData.addSource(
-                    mHomeRepo.getUserList(pageId), apiResponse -> new DatabaseAsync<ApiResponse>(mContext,
-                            mDatabase,
-                            apiResponse,
-                            Constants.Database.INSERT_USERLIST,
-                            result -> mUserLiveData.setValue(apiResponse)
-                    ).execute()
-            );
+                    mHomeRepo.getUserList(pageId), apiResponse -> {
+                        mHomeView.hideLoader();
+                        new DatabaseAsync<ApiResponse>(mContext,
+                                mDatabase,
+                                apiResponse,
+                                Constants.Database.INSERT_USERLIST,
+                                result -> mUserLiveData.setValue(apiResponse)
+                        ).execute();
+                    });
         }
-        return mUserLiveData;
     }
 
 

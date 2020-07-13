@@ -1,22 +1,22 @@
 package com.ftx.mvvm_template.model.dao;
 
-import android.arch.paging.LivePagedListProvider;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.paging.DataSource;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import com.ftx.mvvm_template.model.db.models.UserModel;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 
 /**
  * Name : UserDao
- *<br> Purpose : Dao interface will contains db operation methods with appropriate annotations for UserModel.
+ * <br> Purpose : Dao interface will contains db operation methods with appropriate annotations for UserModel.
  */
 
 @Dao
@@ -24,7 +24,7 @@ public interface UserDao {
 
     //LivePagedListProvider used for observe LiveData<List<UserModel>> with Paging.
     @Query("Select * from UserTbl ORDER BY id ASC")
-    LivePagedListProvider<Integer, UserModel> getPagedUserList();
+    DataSource.Factory<Integer, UserModel> getPagedUserList();
 
     //Get userModel Data from id
     @Query("Select * from UserTbl where id = :userId")

@@ -14,7 +14,7 @@ import com.ftx.mvvm_template.utils.CommonUtils;
  * This class is used to set as custom textview, here we have check for multiple types of attrributes for font name.
  * with respect to font name we have load that particular font.
  */
-public class CustomTextView extends android.support.v7.widget.AppCompatTextView {
+public class CustomTextView extends androidx.appcompat.widget.AppCompatTextView {
     private static final String TAG = "TextView";
 
     public CustomTextView(Context context) {

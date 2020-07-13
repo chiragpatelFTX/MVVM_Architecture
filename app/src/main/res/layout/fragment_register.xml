@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.ftx.mvvm_template.mvvm.viewModels.RegisterViewModel" />
 
     </data>
@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -37,10 +37,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_fregister_email"
                     android:inputType="textEmailAddress" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,10 +53,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_fregister_password"
                     android:inputType="textPassword" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_repassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                     android:hint="@string/hint_fregister_repassword"
                     android:inputType="textPassword" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.ftx.mvvm_template.views.widgets.CustomButton
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_standard"
                 android:background="@color/colorPrimary"
-                android:onClick="@{() -> viewmodel.onClickRegister()}"
+                android:onClick="@{() -> viewModel.onClickRegister()}"
                 android:text="@string/btn_aregister_register"
                 android:textColor="@android:color/white" />
 

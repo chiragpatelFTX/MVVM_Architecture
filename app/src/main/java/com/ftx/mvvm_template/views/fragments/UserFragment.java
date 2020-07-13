@@ -2,11 +2,11 @@ package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.FragmentUsersBinding;
@@ -48,8 +48,9 @@ public class UserFragment extends BaseFragment2<FragmentUsersBinding, HomeViewMo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         mUserAdapter = new UserAdapter(mContext);
-        getmViewDataBinding().rclUserData.setLayoutManager(new LinearLayoutManager(mContext));
-        getmViewDataBinding().rclUserData.setAdapter(mUserAdapter);
+        getmViewDataBinding().setAdapter(mUserAdapter);
+/*        getmViewDataBinding().rclUserData.setLayoutManager(new LinearLayoutManager(mContext));
+        getmViewDataBinding().rclUserData.setAdapter(mUserAdapter);*/
 
         return getmViewDataBinding().getRoot();
     }
@@ -65,11 +66,6 @@ public class UserFragment extends BaseFragment2<FragmentUsersBinding, HomeViewMo
 //        mHomeViewModel.loadUserResponse();
 
         //Observe LiveData response and get updated data and also update UI .
-        mHomeViewModel.getPagedUserList().observe(this, userList -> {
-            hideLoader();
-            if (mUserAdapter != null) {
-                mUserAdapter.setList(userList);
-            }
-        });
+        mHomeViewModel.getPagedUserList().observe(this, mUserAdapter::submitList);
     }
 }

@@ -1,11 +1,12 @@
 package com.ftx.mvvm_template.views.activities;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.ActivityDetailBinding;

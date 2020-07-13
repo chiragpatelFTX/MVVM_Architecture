@@ -1,7 +1,8 @@
 package com.ftx.mvvm_template.mvvm.viewModels;
 
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+
+import androidx.lifecycle.ViewModel;
 
 import com.ftx.mvvm_template.TemplateApplication;
 import com.ftx.mvvm_template.databinding.ActivityDetailBinding;

@@ -2,11 +2,12 @@ package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.FragmentAlbumsBinding;
@@ -61,14 +62,9 @@ public class AlbumFragment extends BaseFragment2<FragmentAlbumsBinding, HomeView
         //Get ViewModel class instance
 
         //Call Method from viewModel class for getAlbum list from server
-        mHomeViewModel.loadAlbumResponse();
+        //mHomeViewModel.loadAlbumResponse();
 
         //Observe LiveData response and get updated data and also update UI .
-        mHomeViewModel.getPagedAlbumList().observe(this, albumList -> {
-            hideLoader();
-            if (mAlbumAdapter != null) {
-                mAlbumAdapter.setList(albumList);
-            }
-        });
+        mHomeViewModel.getPagedAlbumList().observe(this, mAlbumAdapter::submitList);
     }
 }

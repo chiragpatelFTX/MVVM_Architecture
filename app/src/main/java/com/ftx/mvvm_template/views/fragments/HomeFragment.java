@@ -2,10 +2,11 @@ package com.ftx.mvvm_template.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.FragmentHomeBinding;

@@ -1,12 +1,17 @@
 package com.ftx.mvvm_template.binding;
 
-import android.arch.paging.PagedList;
-import android.databinding.BindingAdapter;
-import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.databinding.BindingAdapter;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.ftx.mvvm_template.model.db.models.AlbumModel;
+import com.ftx.mvvm_template.model.db.models.UserModel;
 import com.ftx.mvvm_template.views.adapters.AlbumAdapter;
+import com.ftx.mvvm_template.views.adapters.UserAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,15 +20,20 @@ public class BindingUtils {
 
     @BindingAdapter("adapter")
     public static void bindAdapter(RecyclerView view, RecyclerView.Adapter<RecyclerView.ViewHolder> baseAdapter) {
+        //view.setLayoutManager(new LinearLayoutManager(view.getContext()));
         view.setAdapter(baseAdapter);
     }
 
-    @BindingAdapter("adapterAlbumList")
-    public static void bindAdapterAlbumList(RecyclerView view, PagedList albumList) {
+    @BindingAdapter("adapterList")
+    public static void bindAdapterList(RecyclerView view, PagedList albumList) {
         if (view.getAdapter() instanceof AlbumAdapter) {
             if (albumList != null && albumList.size() > 0 && albumList.get(0) instanceof AlbumModel)
-                ((AlbumAdapter) view.getAdapter()).setList(albumList);
+                ((AlbumAdapter) view.getAdapter()).submitList(albumList);
+        } else if (view.getAdapter() instanceof UserAdapter) {
+            if (albumList != null && albumList.size() > 0 && albumList.get(0) instanceof UserModel)
+                ((UserAdapter) view.getAdapter()).submitList(albumList);
         }
+
     }
 
     @BindingAdapter("age")
@@ -42,5 +52,11 @@ public class BindingUtils {
             textView.setText(String.valueOf(age));
         } catch (Exception ignored) {
         }
+    }
+
+    @BindingAdapter("imageUrl")
+    public static void loadImage(ImageView view, String url) {
+        if (url == null || url.isEmpty()) return;
+        Glide.with(view.getContext()).load(url).into(view);
     }
 }

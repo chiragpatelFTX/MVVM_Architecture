@@ -1,16 +1,17 @@
 package com.ftx.mvvm_template.views.fragments;
 
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.ftx.mvvm_template.framework.model.APIError;
 import com.ftx.mvvm_template.mvvm.views.BaseView;

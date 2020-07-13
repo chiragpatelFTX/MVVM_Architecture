@@ -1,6 +1,6 @@
 package com.ftx.mvvm_template.model.repo;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
 import com.ftx.mvvm_template.framework.model.ApiResponse;
 import com.ftx.mvvm_template.model.entities.request.LoginRequest;
