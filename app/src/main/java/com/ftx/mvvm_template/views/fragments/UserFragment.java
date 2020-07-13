@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.FragmentUsersBinding;
@@ -48,9 +49,9 @@ public class UserFragment extends BaseFragment2<FragmentUsersBinding, HomeViewMo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         mUserAdapter = new UserAdapter(mContext);
-        getmViewDataBinding().setAdapter(mUserAdapter);
-/*        getmViewDataBinding().rclUserData.setLayoutManager(new LinearLayoutManager(mContext));
-        getmViewDataBinding().rclUserData.setAdapter(mUserAdapter);*/
+        //getmViewDataBinding().setAdapter(mUserAdapter);
+        getmViewDataBinding().rclUserData.setLayoutManager(new LinearLayoutManager(mContext));
+        getmViewDataBinding().rclUserData.setAdapter(mUserAdapter);
 
         return getmViewDataBinding().getRoot();
     }
