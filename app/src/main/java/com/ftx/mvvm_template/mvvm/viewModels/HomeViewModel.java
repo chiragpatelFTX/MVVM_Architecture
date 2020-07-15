@@ -2,6 +2,7 @@ package com.ftx.mvvm_template.mvvm.viewModels;
 
 import android.content.Context;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,7 +18,6 @@ import com.ftx.mvvm_template.model.db.models.UserModel;
 import com.ftx.mvvm_template.model.repo.HomeRepository;
 import com.ftx.mvvm_template.model.repo.RepositoryImpl;
 import com.ftx.mvvm_template.model.rest.ItemDataSourceFactory;
-import com.ftx.mvvm_template.model.rest.TDataSource;
 import com.ftx.mvvm_template.mvvm.views.HomeView;
 import com.ftx.mvvm_template.mvvm.views.MvvmView;
 import com.ftx.mvvm_template.utils.Constants;
@@ -36,7 +36,6 @@ public class HomeViewModel extends BaseViewModel {
     public Context mContext;
     public LiveData<PagedList<AlbumModel>> pagedAlbumList;
     public LiveData<PagedList<UserModel>> pagedUserList;
-    TDataSource tDataSource;
     private MyDatabase mDatabase;
     private MediatorLiveData<ApiResponse> mAlbumLiveData;
     private MediatorLiveData<ApiResponse> mUserLiveData;
@@ -57,6 +56,11 @@ public class HomeViewModel extends BaseViewModel {
         mUserLiveData = new MediatorLiveData<>();
         mHomeRepo = new RepositoryImpl();
 
+
+        mAlbumLiveData.observe((LifecycleOwner) this.mContext, apiResponse -> {
+        });
+        mUserLiveData.observe((LifecycleOwner) this.mContext, apiResponse -> {
+        });
         pagedAlbumList = new LivePagedListBuilder(mDatabase.albumDao().getPagedAlbumList(), /* page size */ 10).build();
 
         //Building the paged list
@@ -91,7 +95,7 @@ public class HomeViewModel extends BaseViewModel {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             mHomeView.noInternetConnection(() -> loadAlbumResponse());
         } else {
-            // mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
+            mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
             mAlbumLiveData.addSource(
                     mHomeRepo.getAlbumList(), apiResponse -> {
                         mHomeView.hideLoader();
