@@ -1,9 +1,13 @@
 package com.ftx.mvvm_template.binding;
 
+import android.text.TextUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.databinding.BindingAdapter;
+import androidx.lifecycle.LiveData;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,5 +61,11 @@ public class BindingUtils {
     public static void loadImage(ImageView view, String url) {
         if (url == null || url.isEmpty()) return;
         Glide.with(view.getContext()).load(url).into(view);
+    }
+
+    @BindingAdapter("toast")
+    public static void bindToast(LinearLayout view, LiveData<String> text) {
+        if (text != null && !TextUtils.isEmpty(text.getValue()))
+            Toast.makeText(view.getContext(), text.getValue(), Toast.LENGTH_SHORT).show();
     }
 }

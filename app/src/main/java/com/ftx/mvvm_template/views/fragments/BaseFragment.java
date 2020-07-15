@@ -151,6 +151,4 @@ public class BaseFragment extends Fragment implements BaseView {
     public void toast(String message) {
         Toast.makeText(getCurrentContext(), message, Toast.LENGTH_SHORT).show();
     }
-
-
 }
