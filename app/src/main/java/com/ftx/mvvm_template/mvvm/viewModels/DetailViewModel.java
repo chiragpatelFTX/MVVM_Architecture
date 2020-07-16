@@ -61,12 +61,10 @@ public class DetailViewModel extends BaseViewModel {
         String sTitle = mBinding.edtTitle.getText().toString().trim();
         String sUserId = mBinding.edtUserId.getText().toString().trim();
         if (TextUtils.isEmpty(sTitle)) {
-            mDetailView.toast(mContext.getString(R.string.msg_enterTitle));
-            //toastMessage.setValue(mContext.getString(R.string.msg_enterTitle));
+            toastMessage.setValue(mContext.getString(R.string.msg_enterTitle));
             return;
         } else if (TextUtils.isEmpty(sUserId)) {
-            mDetailView.toast(mContext.getString(R.string.msg_enterUserId));
-            //toastMessage.setValue(mContext.getString(R.string.msg_enterUserId));
+            toastMessage.setValue(mContext.getString(R.string.msg_enterUserId));
             return;
         }
         updateAlbumData(sTitle, sUserId);
@@ -93,12 +91,10 @@ public class DetailViewModel extends BaseViewModel {
         String sLastName = mBinding.edtTitle.getText().toString().trim();      //LastName
 
         if (TextUtils.isEmpty(sFirstName)) {
-            mDetailView.toast(mContext.getString(R.string.msg_enterFirstName));
-            //toastMessage.setValue(mContext.getString(R.string.msg_enterFirstName));
+            toastMessage.setValue(mContext.getString(R.string.msg_enterFirstName));
             return;
         } else if (TextUtils.isEmpty(sLastName)) {
-            mDetailView.toast(mContext.getString(R.string.msg_enterLastName));
-            //toastMessage.setValue(mContext.getString(R.string.msg_enterLastName));
+            toastMessage.setValue(mContext.getString(R.string.msg_enterLastName));
             return;
         }
         updateUserData(sFirstName, sLastName);

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -231,11 +230,11 @@ public class AppBaseActivity extends BaseActivity implements BaseView {
     @Override
     public void apiError(APIError aError) {
         if (aError != null && !StringUtils.isTrimmedEmpty(aError.getStatusMessage()))
-            Toast.makeText(getCurrentContext(), aError.getStatusMessage(), Toast.LENGTH_LONG).show();
+            CommonUtils.showToast(getCurrentContext(), aError.getStatusMessage());
     }
 
     @Override
     public void toast(String message) {
-        Toast.makeText(getCurrentContext(), message, Toast.LENGTH_SHORT).show();
+        CommonUtils.showToast(getCurrentContext(), message);
     }
 }

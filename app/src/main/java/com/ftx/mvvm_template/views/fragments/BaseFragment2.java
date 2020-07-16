@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -170,11 +169,11 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     @Override
     public void apiError(APIError aError) {
         if (aError != null && !StringUtils.isTrimmedEmpty(aError.getStatusMessage()))
-            Toast.makeText(getCurrentContext(), aError.getStatusMessage(), Toast.LENGTH_LONG).show();
+            CommonUtils.showToast(getCurrentContext(), aError.getStatusMessage());
     }
 
     @Override
     public void toast(String message) {
-        Toast.makeText(getCurrentContext(), message, Toast.LENGTH_SHORT).show();
+        CommonUtils.showToast(getCurrentContext(), message);
     }
 }
