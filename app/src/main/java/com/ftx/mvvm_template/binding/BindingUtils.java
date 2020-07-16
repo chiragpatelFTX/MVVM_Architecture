@@ -1,11 +1,12 @@
 package com.ftx.mvvm_template.binding;
 
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.paging.PagedList;
@@ -21,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class BindingUtils {
+
+    private static Toast toast;
 
     @BindingAdapter("adapter")
     public static void bindAdapter(RecyclerView view, RecyclerView.Adapter<RecyclerView.ViewHolder> baseAdapter) {
@@ -64,8 +67,16 @@ public class BindingUtils {
     }
 
     @BindingAdapter("toast")
-    public static void bindToast(LinearLayout view, LiveData<String> text) {
-        if (text != null && !TextUtils.isEmpty(text.getValue()))
-            Toast.makeText(view.getContext(), text.getValue(), Toast.LENGTH_SHORT).show();
+    public static void bindToast(View view, LiveData<String> text) {
+        if (text != null && !TextUtils.isEmpty(text.getValue())) {
+            if (toast != null) toast.cancel();
+            toast = Toast.makeText(view.getContext(), text.getValue(), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    @BindingAdapter("onBackPressed")
+    public static void bindOnBackPressed(View view, AppCompatActivity activity) {
+        view.setOnClickListener(view1 -> activity.onBackPressed());
     }
 }
