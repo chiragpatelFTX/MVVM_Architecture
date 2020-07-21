@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ProjectTemplate</string>
-    <string name="facebook_app_id">1809860379260560</string>
+    <string name="facebook_app_id">908388076334268</string>
+    <string name="fb_login_protocol_scheme">fb908388076334268</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

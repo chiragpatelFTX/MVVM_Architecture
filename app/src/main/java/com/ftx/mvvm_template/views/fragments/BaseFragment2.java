@@ -39,7 +39,6 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     private Dialog mProgressDialog;
     private T mViewDataBinding;
     private V mViewModel;
-    private View mRootView;
 
     public T getmViewDataBinding() {
         return mViewDataBinding;
@@ -59,8 +58,7 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewDataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
-        mRootView = mViewDataBinding.getRoot();
-        return mRootView;
+        return mViewDataBinding.getRoot();
     }
 
     @Override

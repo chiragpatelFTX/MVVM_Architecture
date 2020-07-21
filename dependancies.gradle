@@ -11,6 +11,7 @@ ext {
     archLifecycleVersion = "2.0.0"
     archRoomVersion = "2.0.0"
     paggingVersion = "2.0.0"
+    firebaseAuthVersion = "18.1.0"
 
     appDependencies = [
             fresco             : "com.facebook.fresco:fresco:$frescoVersion",
@@ -50,5 +51,7 @@ ext {
 
 //            gson    : "com.google.code.gson:gson:$gsonVersion",
             crashlytics : "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion",
+            firebaseAuth : "com.google.android.gms:play-services-auth:$firebaseAuthVersion",
+            facebook : "com.facebook.android:facebook-login:[5,6)",
     ]
 }

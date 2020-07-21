@@ -5,21 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.ftx.mvvm_template.R;
@@ -31,12 +26,14 @@ import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
 import com.ftx.mvvm_template.mvvm.views.LoginView;
 import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.views.activities.AppBaseActivity;
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
-import org.json.JSONObject;
+import org.json.JSONException;
 
 import java.util.Arrays;
 
@@ -50,16 +47,15 @@ import java.util.Arrays;
  */
 public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginViewModel> implements LoginView {
 
-    private static final String[] FBPermission = {"email", "public_profile", "user_birthday"};
+    private static final String[] FBPermission = {"email", "public_profile"/*, "user_birthday"*/};
 
     private static final int RC_SIGN_IN = 101;
     LoginViewModel mLoginViewModel;
     // FACEBOOK
     private CallbackManager mCallbackManager;
     private AccessToken mFacebookToken;
-    // FOR GOOGLE
-    private GoogleApiClient mGoogleApiClient;
     private Context mContext;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     public int getLayoutId() {
@@ -77,28 +73,24 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mContext = getActivity();
         super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
-        // For Facebook
-        mCallbackManager = CallbackManager.Factory.create();
-        registerFacebookCallback(mCallbackManager);
-
-        // For Google.
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().requestProfile()
                 .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
-                .enableAutoManage((FragmentActivity) mContext, connectionResult -> apiError(new APIError(connectionResult.getErrorCode(), connectionResult.getErrorMessage())))
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        return getmViewDataBinding().getRoot();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(getCurrentContext(), gso);
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getCurrentContext());
+        //updateUI(account);
+        if (account != null) {
+            Log.e(TAG, account.getEmail());
+            Log.e(TAG, account.getDisplayName());
+        }
+        // For Facebook
+        mCallbackManager = CallbackManager.Factory.create();
+        registerFacebookCallback(mCallbackManager);
     }
 
     @Override
@@ -158,19 +150,33 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
      * @param mFacebookToken : Accesstoken of facebook which we received after successful login.
      */
     private void getFBUserDetails(AccessToken mFacebookToken) {
+        boolean isLoggedIn = mFacebookToken != null && !mFacebookToken.isExpired();
+        AppLog.e(TAG, "isLoggedIn : " + isLoggedIn);
+        if (!isLoggedIn) return;
         AppLog.e(TAG, "Facebook Token : " + mFacebookToken.getToken());
-        Bundle bundle = new Bundle();
-        bundle.putString("fields", "id,name,link,email,birthday,first_name,last_name,gender,picture.type(large)");
-        GraphRequest mRequest = new GraphRequest(mFacebookToken, "/me", bundle, HttpMethod.GET, new GraphRequest.Callback() {
-            @Override
-            public void onCompleted(GraphResponse response) {
-                JSONObject mFBUserObject = response.getJSONObject();
-                AppLog.e(TAG, mFBUserObject.toString());
-                onUserLoggedinSuccess();
-            }
-        });
+        GraphRequest request = GraphRequest.newMeRequest(
+                mFacebookToken, (object, response) -> {
+                    Log.d(TAG, object.toString());
+                    try {
+                        Log.e("FIRST NAME", object.getString("first_name"));
+                        Log.e("LAST NAME", object.getString("last_name"));
+                        Log.e("EMAIL", object.getString("email"));
+                        String id = object.getString("id");
+                        Log.e("ID", id);
+                        Log.e("IMAGE", "https://graph.facebook.com/" + id + "/picture?type=normal");
 
-        mRequest.executeAsync();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    AppLog.e(TAG, object.toString());
+                    onUserLoggedinSuccess();
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name,last_name,email,id");
+//        bundle.putString("fields", "id,name,link,email,birthday,first_name,last_name,gender,picture.type(large)");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
 
@@ -204,8 +210,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
+        mGoogleSignInClient.signOut();
     }
 
     /**
@@ -226,7 +231,11 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
      */
     @Override
     public void onClickGmailLogin() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        signIn();
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -246,31 +255,39 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            onGoogleSignInResult(result);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
             return;
         }
-
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 
     /**
-     * Name : LoginFragment onGoogleSignInResult
-     * <br> Purpose :
-     * This method will handle the result from google signin.
+     * Name : LoginFragment handleSignInResult
+     * <br/> Created by Darshan Rathod 20-07-2020
+     * <br/> Modified by Darshan Rathod 20-07-2020
+     * <br/> Purpose : check google signin result and update UI
      *
-     * @param result : object of {@link GoogleSignInResult} which we received after login with google.
+     * @implNote
      */
-    private void onGoogleSignInResult(GoogleSignInResult result) {
-        AppLog.d(TAG, "handleSignInResult:" + result.isSuccess() + result.getStatus().getStatusCode());
-        if (result.isSuccess()) {
-            AppLog.e(TAG, result.getSignInAccount().getDisplayName());
-            onUserLoggedinSuccess();
-        } else {
-            apiError(new APIError(0, "We\'ve cancelled the google sign in."));
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            if (account != null) {
+                Log.e(TAG, account.getEmail());
+                Log.e(TAG, account.getDisplayName());
+                onUserLoggedinSuccess();
+            }
+            // Signed in successfully, show authenticated UI.
+            // updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            //updateUI(null);
         }
     }
 
