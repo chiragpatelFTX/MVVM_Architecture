@@ -1,7 +1,7 @@
 ext {
 
     supportLibVersion = '26.1.0'
-    retrofitVersion = '2.3.0'
+    retrofitVersion = '2.9.0'
     okHttpVersion = '3.8.1'
     leakCanaryVersion = '1.5.1'
     frescoVersion = '1.5.0'
