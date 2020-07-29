@@ -1,9 +1,9 @@
 package com.ftx.mvvm_template.model.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ftx.mvvm_template.model.dao.AlbumDao;
 import com.ftx.mvvm_template.model.dao.UserDao;

@@ -7,17 +7,21 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.LayoutRes;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.ftx.mvvm_template.BR;
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.ActivityBaseBinding;
 import com.ftx.mvvm_template.framework.model.APIError;
 import com.ftx.mvvm_template.model.entities.NavItemModel;
+import com.ftx.mvvm_template.mvvm.viewModels.BaseViewModel;
 import com.ftx.mvvm_template.mvvm.views.BaseView;
 import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.CommonUtils;
@@ -33,22 +37,38 @@ import com.ftx.mvvm_template.views.listeners.NetworkRetryCallback;
  * <p>
  * It contains toolbar, methods for setting fragments, Back Handling mechanism Etc.
  */
-public class AppBaseActivity extends BaseActivity implements BaseView {
+public abstract class AppBaseActivity2<T extends ViewDataBinding, V extends BaseViewModel> extends BaseActivity implements BaseView {
 
     ActivityBaseBinding mBinding;
-    private String TAG = AppBaseActivity.class.getSimpleName();
+    private String TAG = AppBaseActivity2.class.getSimpleName();
     private String prevTag;
     private Dialog mProgressDialog;
+    private T mViewDataBinding;
+    private V mViewModel;
+
+    public T getmViewDataBinding() {
+        return mViewDataBinding;
+    }
+
+    @LayoutRes
+    public abstract int getLayoutId();
+
+    public abstract V getViewModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
-        setSupportActionBar(mBinding.toolbar);
+        performDataBinding();
 
     }
 
+    private void performDataBinding() {
+        mViewDataBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        this.mViewModel = mViewModel == null ? getViewModel() : mViewModel;
+        mViewDataBinding.setVariable(BR.viewModel, mViewModel);
+        mViewDataBinding.setLifecycleOwner(this);
+//        mViewDataBinding.executePendingBindings();
+    }
 
     @Override
     protected void onDestroy() {

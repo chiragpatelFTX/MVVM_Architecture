@@ -1,14 +1,15 @@
 package com.ftx.mvvm_template.views.adapters;
 
-import android.arch.paging.PagedListAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.AlbumAdapterBinding;

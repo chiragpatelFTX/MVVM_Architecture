@@ -1,21 +1,21 @@
 package com.ftx.mvvm_template.model.dao;
 
-import android.arch.paging.LivePagedListProvider;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.paging.DataSource;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import com.ftx.mvvm_template.model.db.models.AlbumModel;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 /**
  * Name : AlbumDao
- *<br> Purpose : Dao interface will contains db operation methods with appropriate annotations for AlbumModel.
+ * <br> Purpose : Dao interface will contains db operation methods with appropriate annotations for AlbumModel.
  */
 
 @Dao
@@ -27,7 +27,7 @@ public interface AlbumDao {
 
     //LivePagedListProvider used for observe LiveData<List<AlbumModel>> with Paging.
     @Query("Select * from albumsTbl ORDER BY id ASC")
-    LivePagedListProvider<Integer, AlbumModel> getPagedAlbumList();
+    DataSource.Factory<Integer, AlbumModel> getPagedAlbumList();
 
     //Insert AlbumModel Data
     @Insert(onConflict = REPLACE)

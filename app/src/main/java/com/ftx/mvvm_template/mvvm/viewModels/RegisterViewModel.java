@@ -1,26 +1,24 @@
 package com.ftx.mvvm_template.mvvm.viewModels;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.ViewModel;
+
+import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.TemplateApplication;
 import com.ftx.mvvm_template.databinding.FragmentRegisterBinding;
-import com.ftx.mvvm_template.framework.model.APIError;
 import com.ftx.mvvm_template.framework.model.ApiResponse;
 import com.ftx.mvvm_template.model.db.MyDatabase;
 import com.ftx.mvvm_template.model.entities.request.RegisterRequest;
-import com.ftx.mvvm_template.model.entities.response.RegisterResponse;
 import com.ftx.mvvm_template.model.repo.HomeRepository;
 import com.ftx.mvvm_template.model.repo.RepositoryImpl;
 import com.ftx.mvvm_template.mvvm.views.MvvmView;
+import com.ftx.mvvm_template.mvvm.views.RegisterView;
 import com.ftx.mvvm_template.utils.StringUtils;
 import com.ftx.mvvm_template.utils.network.NetworkUtils;
-import com.ftx.mvvm_template.R;
-import com.ftx.mvvm_template.mvvm.views.RegisterView;
 import com.ftx.mvvm_template.views.fragments.RegisterFragment;
 
 /**

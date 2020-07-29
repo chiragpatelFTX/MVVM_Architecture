@@ -1,5 +1,6 @@
 package com.ftx.mvvm_template.mvvm.views;
 
+import com.ftx.mvvm_template.databinding.ActivityDetailBinding;
 import com.ftx.mvvm_template.views.fragments.LoginFragment;
 
 /**
@@ -11,12 +12,8 @@ import com.ftx.mvvm_template.views.fragments.LoginFragment;
  */
 public interface DetailView extends BaseView {
 
-    void onAlbumUpdate();
+    void goBack();
 
-    void onAlbumDelete();
-
-    void onUserUpdate();
-
-    void onUserDelete();
+    ActivityDetailBinding getBindingVariable();
 
 }

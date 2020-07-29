@@ -1,19 +1,20 @@
 package com.ftx.mvvm_template.views.fragments;
 
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.ftx.mvvm_template.BR;
 import com.ftx.mvvm_template.framework.model.APIError;
@@ -38,7 +39,6 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     private Dialog mProgressDialog;
     private T mViewDataBinding;
     private V mViewModel;
-    private View mRootView;
 
     public T getmViewDataBinding() {
         return mViewDataBinding;
@@ -50,10 +50,15 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     public abstract V getViewModel();
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(false);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewDataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
-        mRootView = mViewDataBinding.getRoot();
-        return mRootView;
+        return mViewDataBinding.getRoot();
     }
 
     @Override
@@ -162,11 +167,11 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     @Override
     public void apiError(APIError aError) {
         if (aError != null && !StringUtils.isTrimmedEmpty(aError.getStatusMessage()))
-            Toast.makeText(getCurrentContext(), aError.getStatusMessage(), Toast.LENGTH_LONG).show();
+            CommonUtils.showToast(getCurrentContext(), aError.getStatusMessage());
     }
 
     @Override
     public void toast(String message) {
-        Toast.makeText(getCurrentContext(), message, Toast.LENGTH_SHORT).show();
+        CommonUtils.showToast(getCurrentContext(), message);
     }
 }

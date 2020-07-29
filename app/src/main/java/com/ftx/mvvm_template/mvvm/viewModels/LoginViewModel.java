@@ -1,10 +1,11 @@
 package com.ftx.mvvm_template.mvvm.viewModels;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.TemplateApplication;

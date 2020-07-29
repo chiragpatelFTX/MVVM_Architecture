@@ -1,11 +1,11 @@
 package com.ftx.mvvm_template.model.db.models;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-import android.support.v7.recyclerview.extensions.DiffCallback;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -70,7 +70,7 @@ public class AlbumModel {
      * <br> Purpose : DiffCallback will check weather your data is changed or not if yes than return true other wise return
      * false and according to this your adapter will update your record or insert new record in recycler view.
      */
-    public static final DiffCallback<AlbumModel> ALBUM_DIFF_CALLBACK = new DiffCallback<AlbumModel>() {
+    public static final DiffUtil.ItemCallback<AlbumModel> ALBUM_DIFF_CALLBACK = new DiffUtil.ItemCallback<AlbumModel>() {
         @Override
         public boolean areItemsTheSame(@NonNull AlbumModel oldAlbumModel, @NonNull AlbumModel newAlbumModel) {
             return oldAlbumModel.userId == newAlbumModel.userId;

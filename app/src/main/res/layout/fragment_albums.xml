@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="adapter"
+            type="com.ftx.mvvm_template.views.adapters.AlbumAdapter" />
 
         <variable
             name="viewModel"
@@ -16,12 +21,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcl_AlbumData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
+            app:adapter="@{adapter}"
+            app:adapterList="@{viewModel.getPagedAlbumList()}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/album_adapter" />
 
     </LinearLayout>

@@ -7,8 +7,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="event"
-            type="com.ftx.mvvm_template.views.activities.DetailActivity" />
+            name="viewModel"
+            type="com.ftx.mvvm_template.mvvm.viewModels.DetailViewModel" />
 
         <variable
             name="albumModel"
@@ -26,13 +26,13 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llAppBase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
@@ -45,9 +45,9 @@
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:titleTextColor="@android:color/white">
 
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/lnr_insertdata"
@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="visible"
+            app:toast="@{viewModel.getToastMessage()}">
 
             <EditText
                 android:id="@+id/edt_albumId"
@@ -94,7 +95,7 @@
                 android:id="@+id/btn_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> (albumModel != null ? event.updateAlbumModel() : event.updateUserModel())}"
+                android:onClick="@{() -> (albumModel != null ? viewModel.updateAlbumModel() : viewModel.updateUserModel())}"
                 android:text="Update" />
 
             <Button
@@ -102,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:onClick="@{() -> (albumModel != null ? event.deleteAlbumModel() : event.deleteUserModel())}"
+                android:onClick="@{() -> (albumModel != null ? viewModel.deleteAlbumModel() : viewModel.deleteUserModel())}"
                 android:text="Delete" />
 
         </LinearLayout>
