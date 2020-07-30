@@ -66,6 +66,7 @@
 
 
         <LinearLayout
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/aLogin_btnLogin"
@@ -94,6 +95,18 @@
                 android:text="@string/btn_alogin_google"
                 android:textColor="@android:color/white" />
         </LinearLayout>
+
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:id="@+id/btnTwitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/spacing_activity_container"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/twitter"
+            android:textColor="@android:color/white" />
 
         <com.ftx.mvvm_template.views.widgets.CustomButton
             android:id="@+id/fLogin_btnNewAccount"

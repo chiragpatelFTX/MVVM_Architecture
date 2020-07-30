@@ -124,4 +124,6 @@ dependencies {
 
 
     implementation appDependencies.glide
+    implementation 'com.twitter.sdk.android:twitter-core:3.3.0'
+    implementation 'com.twitter.sdk.android:tweet-ui:3.3.0'
 }

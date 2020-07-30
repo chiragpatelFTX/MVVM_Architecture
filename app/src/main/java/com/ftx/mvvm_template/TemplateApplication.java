@@ -1,6 +1,7 @@
 package com.ftx.mvvm_template;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.room.Room;
 
@@ -15,6 +16,10 @@ import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.DeviceUuidFactory;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 
 import java.io.IOException;
 
@@ -53,6 +58,14 @@ public class TemplateApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         //  Fabric.with(this, new Crashlytics());
 
+        TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))//enable logging when app is in debug mode
+                .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_KEY), getResources().getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET)))//pass the created app Consumer KEY and Secret also called API Key and Secret
+                .debug(true)//enable debug mode
+                .build();
+
+        //finally initialize twitter with created configs
+        Twitter.initialize(config);
 
         mContext = this;
 

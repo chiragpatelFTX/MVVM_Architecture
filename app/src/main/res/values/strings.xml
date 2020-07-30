@@ -2,6 +2,8 @@
     <string name="app_name">ProjectTemplate</string>
     <string name="facebook_app_id">908388076334268</string>
     <string name="fb_login_protocol_scheme">fb908388076334268</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">MVfKntw1IRMNP5O04uLsjFpVB</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">e06wPlYIRBjX6oSfqFs2GYnybA4HT2RSR208vYVVuE6Rwvxjj7</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -49,4 +51,5 @@
     <string name="error_camera_not_available">Your device does not support camera.</string>
     <string name="btn_dialog_retry">Retry</string>
     <string name="loader">Loading...</string>
+    <string name="twitter">Twitter</string>
 </resources>
