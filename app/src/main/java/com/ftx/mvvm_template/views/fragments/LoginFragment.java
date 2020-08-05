@@ -32,10 +32,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.models.User;
 
 import org.json.JSONException;
 
 import java.util.Arrays;
+
+import retrofit2.Call;
 
 
 /**
@@ -56,6 +67,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     private AccessToken mFacebookToken;
     private Context mContext;
     private GoogleSignInClient mGoogleSignInClient;
+    private TwitterAuthClient authClient;
 
     @Override
     public int getLayoutId() {
@@ -90,6 +102,19 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
         }
         // For Facebook
         mCallbackManager = CallbackManager.Factory.create();
+
+        authClient = new TwitterAuthClient();
+        //To get the session
+        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+
+        if (session != null) {
+            TwitterAuthToken authToken = session.getAuthToken();
+            String token = authToken.token;
+            String secret = authToken.secret;
+        }
+        //To clear the session
+        TwitterCore.getInstance().getSessionManager().clearActiveSession();
+
         registerFacebookCallback(mCallbackManager);
     }
 
@@ -110,6 +135,63 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
                 }
             }
 
+        });
+        registerTwitterCallback();
+    }
+
+    private void registerTwitterCallback() {
+        getmViewDataBinding().btnTwitter.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a TwitterSession for making API calls
+                getTwitterUserDetails(result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
+        });
+    }
+
+    private void getTwitterUserDetails(TwitterSession session) {
+        authClient.requestEmail(session, new Callback<String>() {
+            @Override
+            public void success(Result<String> result) {
+                // Do something with the result, which provides the email address
+                Log.e(TAG, "User Id : " + session.getUserId() + "\nScreen Name : " + session.getUserName() + "\nEmail Id : " + result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
+        });
+
+        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+        Call<User> call = twitterApiClient.getAccountService().verifyCredentials(true, false, true);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void success(Result<User> result) {
+                // Do something with result, which provides a User
+                User user = result.data;
+                Log.e(TAG, "User Id : " + user.id + "\nUser Name : " + user.name + "\nEmail Id : " + user.email + "\nScreen Name : " + user.screenName);
+
+                String imageProfileUrl = user.profileImageUrl;
+                Log.e(TAG, "Data : " + imageProfileUrl);
+                //NOTE : User profile provided by twitter is very small in size i.e 48*48
+                //Link : https://developer.twitter.com/en/docs/accounts-and-users/user-profile-images-and-banners
+                //so if you want to get bigger size image then do the following:
+                imageProfileUrl = imageProfileUrl.replace("_normal", "");
+                Log.e(TAG, "Data : " + imageProfileUrl);
+
+                onUserLoggedinSuccess();
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
         });
     }
 
@@ -262,6 +344,13 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
             handleSignInResult(task);
             return;
         }
+        // Pass the activity result to the twitterAuthClient.
+        if (authClient != null)
+            authClient.onActivityResult(requestCode, resultCode, data);
+
+
+        // Pass the activity result to the login button.
+        getmViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
     }
 
 
