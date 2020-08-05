@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "794052355569",
+    "firebase_url": "https://ftx-mvvm-template.firebaseio.com",
+    "project_id": "ftx-mvvm-template",
+    "storage_bucket": "ftx-mvvm-template.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794052355569:android:0f9d76e3de8f5a51615050",
+        "android_client_info": {
+          "package_name": "com.ftx.mvvm_template"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794052355569-pto19j2u4s86e8qoehr1igkocv5e0kpa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfXDKLacRVxOCwIoMvyxCERt2R8I0FgE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794052355569-vdrn9mtaje4jsh2lk368b9sdkk9vjdiq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
