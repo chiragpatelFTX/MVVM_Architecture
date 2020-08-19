@@ -43,8 +43,8 @@ import retrofit2.Call;
  *       Name : SignInHelper
  *       <br> Purpose : Class use for login with(Google/Facebook/Twitter)
  *      App.Build Gradle for Sign in from different platform.
- *      Google:- implementation com.google.android.gms:play-services-auth18.1.0'
- *      Facebook:-implementation com.facebook.android:facebook-login:[5,6)'
+ *      Google:- implementation 'com.google.android.gms:play-services-auth:18.1.0'
+ *      Facebook:-implementation 'com.facebook.android:facebook-login:[5,6)'
  *      Twitter:-implementation appDependencies.glide
  *               implementation 'com.twitter.sdk.android:twitter-core:3.3.0'
  *               implementation 'com.twitter.sdk.android:tweet-ui:3.3.0'
