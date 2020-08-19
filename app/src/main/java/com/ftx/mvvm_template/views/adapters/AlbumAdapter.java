@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ftx.mvvm_template.R;
 import com.ftx.mvvm_template.databinding.AlbumAdapterBinding;
 import com.ftx.mvvm_template.model.db.models.AlbumModel;
+import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.Constants;
 import com.ftx.mvvm_template.views.activities.DetailActivity;
 
@@ -33,12 +34,12 @@ public class AlbumAdapter extends PagedListAdapter<AlbumModel, AlbumAdapter.View
         super(AlbumModel.ALBUM_DIFF_CALLBACK);
         this.mContext = mContext;
     }
-
     @Override
     public ViewHolderUserAdapter onCreateViewHolder(ViewGroup parent, int viewType) {
         //Append "Binding" as a suffix to your Layout resource file name but make sure to remove '_' or any special character from Resource file name and than append 'Binding' as a suffix.
         //Inflate layout using DataBindingUtil
-        AlbumAdapterBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.album_adapter, parent, false);
+        AlbumAdapterBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.album_adapter, parent, false);
 
         return new ViewHolderUserAdapter(viewDataBinding.getRoot());
     }

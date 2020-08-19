@@ -15,7 +15,6 @@ import com.ftx.mvvm_template.views.fragments.LoginFragment;
  * <br> Purpose : Home activity which contains all the fragments of applications.
  */
 public class HomeActivity extends AppBaseActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

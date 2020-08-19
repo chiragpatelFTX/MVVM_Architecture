@@ -25,6 +25,7 @@ import com.ftx.mvvm_template.model.entities.response.LoginResponse;
 import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
 import com.ftx.mvvm_template.mvvm.views.LoginView;
 import com.ftx.mvvm_template.utils.AppLog;
+import com.ftx.mvvm_template.utils.SignInHelper;
 import com.ftx.mvvm_template.views.activities.AppBaseActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -56,7 +57,8 @@ import retrofit2.Call;
  * which override all the methods of the login view. and also navigates
  * per the login response and if there are any errors then we will display that error.
  */
-public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginViewModel> implements LoginView {
+public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginViewModel> implements
+        LoginView {
 
     private static final String[] FBPermission = {"email", "public_profile"/*, "user_birthday"*/};
 
@@ -69,6 +71,8 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     private GoogleSignInClient mGoogleSignInClient;
     private TwitterAuthClient authClient;
 
+    // SignInHelper Class For Different Platforms.
+    private SignInHelper signInHelper;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_login;
@@ -85,37 +89,6 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mContext = getActivity();
         super.onCreate(savedInstanceState);
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().requestProfile()
-                .build();
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(getCurrentContext(), gso);
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getCurrentContext());
-        //updateUI(account);
-        if (account != null) {
-            Log.e(TAG, account.getEmail());
-            Log.e(TAG, account.getDisplayName());
-        }
-        // For Facebook
-        mCallbackManager = CallbackManager.Factory.create();
-
-        authClient = new TwitterAuthClient();
-        //To get the session
-        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
-        if (session != null) {
-            TwitterAuthToken authToken = session.getAuthToken();
-            String token = authToken.token;
-            String secret = authToken.secret;
-        }
-        //To clear the session
-        TwitterCore.getInstance().getSessionManager().clearActiveSession();
-
-        registerFacebookCallback(mCallbackManager);
     }
 
     @Override
@@ -136,132 +109,9 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
             }
 
         });
-        registerTwitterCallback();
+        signInHelper=new SignInHelper(mContext,getContext().getResources().getString(R.string.app_twitter));
+        signInHelper.registerTwitterCallback(getmViewDataBinding().btnTwitter);
     }
-
-    private void registerTwitterCallback() {
-        getmViewDataBinding().btnTwitter.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
-                // Do something with result, which provides a TwitterSession for making API calls
-                getTwitterUserDetails(result.data);
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-            }
-        });
-    }
-
-    private void getTwitterUserDetails(TwitterSession session) {
-        authClient.requestEmail(session, new Callback<String>() {
-            @Override
-            public void success(Result<String> result) {
-                // Do something with the result, which provides the email address
-                Log.e(TAG, "User Id : " + session.getUserId() + "\nScreen Name : " + session.getUserName() + "\nEmail Id : " + result.data);
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-            }
-        });
-
-        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
-        Call<User> call = twitterApiClient.getAccountService().verifyCredentials(true, false, true);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void success(Result<User> result) {
-                // Do something with result, which provides a User
-                User user = result.data;
-                Log.e(TAG, "User Id : " + user.id + "\nUser Name : " + user.name + "\nEmail Id : " + user.email + "\nScreen Name : " + user.screenName);
-
-                String imageProfileUrl = user.profileImageUrl;
-                Log.e(TAG, "Data : " + imageProfileUrl);
-                //NOTE : User profile provided by twitter is very small in size i.e 48*48
-                //Link : https://developer.twitter.com/en/docs/accounts-and-users/user-profile-images-and-banners
-                //so if you want to get bigger size image then do the following:
-                imageProfileUrl = imageProfileUrl.replace("_normal", "");
-                Log.e(TAG, "Data : " + imageProfileUrl);
-
-                onUserLoggedinSuccess();
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-            }
-        });
-    }
-
-    /**
-     * Name : LoginFragment registerFacebookCallback
-     * <br> Purpose :
-     * This method will register the callback manager while we do login with facebook.
-     *
-     * @param mCallbackManager : callback manager of facebook to get the login success or not from facebook
-     *                         and receive the access token.
-     */
-    private void registerFacebookCallback(CallbackManager mCallbackManager) {
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                mFacebookToken = loginResult.getAccessToken();
-                getFBUserDetails(mFacebookToken);
-            }
-
-            @Override
-            public void onCancel() {
-                apiError(new APIError(0, "You have cancelled the login with facebook."));
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                apiError(new APIError(error.hashCode(), error.getMessage()));
-            }
-        });
-    }
-
-
-    /**
-     * Name : LoginFragment getFBUserDetails
-     * <br> Purpose :
-     * This method will get the user detail of the logged in user.
-     *
-     * @param mFacebookToken : Accesstoken of facebook which we received after successful login.
-     */
-    private void getFBUserDetails(AccessToken mFacebookToken) {
-        boolean isLoggedIn = mFacebookToken != null && !mFacebookToken.isExpired();
-        AppLog.e(TAG, "isLoggedIn : " + isLoggedIn);
-        if (!isLoggedIn) return;
-        AppLog.e(TAG, "Facebook Token : " + mFacebookToken.getToken());
-        GraphRequest request = GraphRequest.newMeRequest(
-                mFacebookToken, (object, response) -> {
-                    Log.d(TAG, object.toString());
-                    try {
-                        Log.e("FIRST NAME", object.getString("first_name"));
-                        Log.e("LAST NAME", object.getString("last_name"));
-                        Log.e("EMAIL", object.getString("email"));
-                        String id = object.getString("id");
-                        Log.e("ID", id);
-                        Log.e("IMAGE", "https://graph.facebook.com/" + id + "/picture?type=normal");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    AppLog.e(TAG, object.toString());
-                    onUserLoggedinSuccess();
-                });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "first_name,last_name,email,id");
-//        bundle.putString("fields", "id,name,link,email,birthday,first_name,last_name,gender,picture.type(large)");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
-
     /**
      * Name : LoginFragment onLoginSuccess
      * <br> Purpose :
@@ -292,7 +142,9 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mGoogleSignInClient.signOut();
+        if (GoogleSignIn.getLastSignedInAccount(mContext) != null) {
+            signInHelper.mGoogleSignInClient.signOut();
+        }
     }
 
     /**
@@ -301,10 +153,12 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
      */
     @Override
     public void onClickFacebookLogin() {
-        if (mFacebookToken == null)
-            LoginManager.getInstance().logInWithReadPermissions(LoginFragment.this, Arrays.asList(FBPermission));
+        signInHelper=new SignInHelper(mContext,mContext.getResources().getString(R.string.app_facebook));
+        if (signInHelper.mFacebookToken == null)
+            LoginManager.getInstance().logInWithReadPermissions
+                    (LoginFragment.this, Arrays.asList(FBPermission));
         else
-            getFBUserDetails(mFacebookToken);
+            signInHelper.getFBUserDetails(signInHelper.mFacebookToken);
     }
 
     /**
@@ -317,8 +171,9 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     }
 
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        signInHelper=new SignInHelper(mContext,mContext.getResources().getString(R.string.app_google));
+        Intent signInIntent = signInHelper.performSignIn();
+        startActivityForResult(signInIntent, signInHelper.RC_SIGN_IN);
     }
 
     /**
@@ -337,67 +192,18 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        signInHelper.mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == signInHelper.RC_SIGN_IN/*requestCode == googleSignInHelper.RC_SIGN_IN*/) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            signInHelper.handleSignInResult(task);
             return;
         }
         // Pass the activity result to the twitterAuthClient.
-        if (authClient != null)
-            authClient.onActivityResult(requestCode, resultCode, data);
-
+        if (signInHelper.authClient != null)
+            signInHelper.authClient.onActivityResult(requestCode, resultCode, data);
 
         // Pass the activity result to the login button.
         getmViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
     }
-
-
-    /**
-     * Name : LoginFragment handleSignInResult
-     * <br/> Created by Darshan Rathod 20-07-2020
-     * <br/> Modified by Darshan Rathod 20-07-2020
-     * <br/> Purpose : check google signin result and update UI
-     *
-     * @implNote
-     */
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            if (account != null) {
-                Log.e(TAG, account.getEmail());
-                Log.e(TAG, account.getDisplayName());
-                onUserLoggedinSuccess();
-            }
-            // Signed in successfully, show authenticated UI.
-            // updateUI(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
-        }
-    }
-
-
-    /**
-     * Name : LoginFragment onUserLoggedinSuccess
-     * <br> Purpose : This method will execute from presenter when user successfully loggedin.
-     */
-    public void onUserLoggedinSuccess() {
-        // Redirect User to Home Page.
-
-        NavItemModel mChangeAssessment = new NavItemModel(
-                R.mipmap.ic_launcher,
-                HomeFragment.class.getSimpleName(),
-                HomeFragment.class,
-                HomeFragment.class.getSimpleName(), null);
-
-        ((AppBaseActivity) getActivity()).clearAllTopFragment();
-
-        ((AppBaseActivity) getActivity()).setFragment(mChangeAssessment);
-
-    }
-
 }

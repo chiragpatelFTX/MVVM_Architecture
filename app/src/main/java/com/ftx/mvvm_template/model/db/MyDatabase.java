@@ -24,8 +24,6 @@ public abstract class   MyDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
     public abstract AlbumDao albumDao();
-
-
     /**
      * Each Migration has a start and end versions and Room runs these migrations to bring the database to the latest version.
      * If a migration item is missing between current version and the latest version, Room will clear the database and recreate

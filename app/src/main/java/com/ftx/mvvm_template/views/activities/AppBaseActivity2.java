@@ -37,7 +37,8 @@ import com.ftx.mvvm_template.views.listeners.NetworkRetryCallback;
  * <p>
  * It contains toolbar, methods for setting fragments, Back Handling mechanism Etc.
  */
-public abstract class AppBaseActivity2<T extends ViewDataBinding, V extends BaseViewModel> extends BaseActivity implements BaseView {
+public abstract class AppBaseActivity2<T extends ViewDataBinding, V extends BaseViewModel>
+        extends BaseActivity implements BaseView {
 
     ActivityBaseBinding mBinding;
     private String TAG = AppBaseActivity2.class.getSimpleName();

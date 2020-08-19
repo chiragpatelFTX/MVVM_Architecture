@@ -52,4 +52,9 @@
     <string name="btn_dialog_retry">Retry</string>
     <string name="loader">Loading...</string>
     <string name="twitter">Twitter</string>
+
+    <!--Social App name check during login-->
+    <string name="app_twitter">Twitter</string>
+    <string name="app_facebook">Facebook</string>
+    <string name="app_google">Google</string>
 </resources>

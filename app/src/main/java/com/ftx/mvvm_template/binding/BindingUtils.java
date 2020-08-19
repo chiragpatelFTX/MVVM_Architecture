@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ftx.mvvm_template.model.db.models.AlbumModel;
 import com.ftx.mvvm_template.model.db.models.UserModel;
+import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.views.adapters.AlbumAdapter;
 import com.ftx.mvvm_template.views.adapters.UserAdapter;
 
@@ -39,7 +40,6 @@ public class BindingUtils {
             if (albumList != null && albumList.size() > 0 && albumList.get(0) instanceof UserModel)
                 ((UserAdapter) view.getAdapter()).submitList(albumList);
         }
-
     }
 
     @BindingAdapter("age")

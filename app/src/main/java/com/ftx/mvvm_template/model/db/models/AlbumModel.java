@@ -8,6 +8,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ftx.mvvm_template.utils.AppLog;
 
 /**
  * Name : AlbumModel

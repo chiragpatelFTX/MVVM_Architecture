@@ -20,6 +20,7 @@ import com.ftx.mvvm_template.model.repo.RepositoryImpl;
 import com.ftx.mvvm_template.model.rest.ItemDataSourceFactory;
 import com.ftx.mvvm_template.mvvm.views.HomeView;
 import com.ftx.mvvm_template.mvvm.views.MvvmView;
+import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.Constants;
 import com.ftx.mvvm_template.utils.DatabaseAsync;
 import com.ftx.mvvm_template.utils.network.NetworkUtils;
@@ -61,7 +62,8 @@ public class HomeViewModel extends BaseViewModel {
         });
         mUserLiveData.observe((LifecycleOwner) this.mContext, apiResponse -> {
         });
-        pagedAlbumList = new LivePagedListBuilder(mDatabase.albumDao().getPagedAlbumList(), /* page size */ 10).build();
+        pagedAlbumList = new LivePagedListBuilder(mDatabase.albumDao().getPagedAlbumList(),
+                /* page size */ 10).build();
 
         //Building the paged list
         pagedUserList = new LivePagedListBuilder(new ItemDataSourceFactory(),

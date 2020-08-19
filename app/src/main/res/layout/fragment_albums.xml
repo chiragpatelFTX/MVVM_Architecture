@@ -31,7 +31,6 @@
             app:adapterList="@{viewModel.getPagedAlbumList()}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/album_adapter" />
-
     </LinearLayout>
 
 </layout>

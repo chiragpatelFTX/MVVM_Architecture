@@ -14,6 +14,7 @@ import com.ftx.mvvm_template.model.db.models.AlbumModel;
 import com.ftx.mvvm_template.model.db.models.UserModel;
 import com.ftx.mvvm_template.mvvm.views.DetailView;
 import com.ftx.mvvm_template.mvvm.views.MvvmView;
+import com.ftx.mvvm_template.utils.AppLog;
 import com.ftx.mvvm_template.utils.Constants;
 import com.ftx.mvvm_template.utils.DatabaseAsync;
 
@@ -148,7 +149,7 @@ public class DetailViewModel extends BaseViewModel {
             //For access resource use mBinding "object.resourseName"
             mAlbumModel.setTitle(sTitle);
             mAlbumModel.setUserId(Integer.parseInt(sUserId));
-
+            AppLog.e(TAG, "UpdateData:>>>>>>>"+sTitle+" "+sUserId);
             new DatabaseAsync<AlbumModel>(mContext,
                     mDatabase,
                     mAlbumModel,
