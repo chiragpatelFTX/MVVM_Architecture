@@ -194,7 +194,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         signInHelper.mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == signInHelper.RC_SIGN_IN/*requestCode == googleSignInHelper.RC_SIGN_IN*/) {
+        if (requestCode == signInHelper.RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             signInHelper.handleSignInResult(task);
             return;
