@@ -25,7 +25,9 @@ import com.ftx.mvvm_template.model.entities.response.LoginResponse;
 import com.ftx.mvvm_template.mvvm.viewModels.LoginViewModel;
 import com.ftx.mvvm_template.mvvm.views.LoginView;
 import com.ftx.mvvm_template.utils.AppLog;
-import com.ftx.mvvm_template.utils.SignInHelper;
+import com.ftx.mvvm_template.utils.FacebookSignInHelper;
+import com.ftx.mvvm_template.utils.GoogleSignInHelper;
+import com.ftx.mvvm_template.utils.TwitterSignInHelper;
 import com.ftx.mvvm_template.views.activities.AppBaseActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -71,8 +73,12 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     private GoogleSignInClient mGoogleSignInClient;
     private TwitterAuthClient authClient;
 
-    // SignInHelper Class For Different Platforms.
-    private SignInHelper signInHelper;
+    //Facebook Sign-In Helper Class
+    private FacebookSignInHelper facebookSignInHelper;
+    //Google Sign-In Class
+    private GoogleSignInHelper googleSignInHelper;
+    //Twitter Sign-In Helper Class
+    private TwitterSignInHelper twitterSignInHelper;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_login;
@@ -89,6 +95,14 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mContext = getActivity();
         super.onCreate(savedInstanceState);
+        // For Google Signin
+        googleSignInHelper=new GoogleSignInHelper(mContext);
+        // For Facebook
+        facebookSignInHelper=new FacebookSignInHelper(mContext);
+//        mCallbackManager = CallbackManager.Factory.create();
+        // For Twitter Sign in
+        twitterSignInHelper=new TwitterSignInHelper(mContext);
+
     }
 
     @Override
@@ -109,9 +123,9 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
             }
 
         });
-        signInHelper=new SignInHelper(mContext,getContext().getResources().getString(R.string.app_twitter));
-        signInHelper.registerTwitterCallback(getmViewDataBinding().btnTwitter);
+        twitterSignInHelper.registerTwitterCallback(getmViewDataBinding().btnTwitter);
     }
+
     /**
      * Name : LoginFragment onLoginSuccess
      * <br> Purpose :
@@ -142,9 +156,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (GoogleSignIn.getLastSignedInAccount(mContext) != null) {
-            signInHelper.mGoogleSignInClient.signOut();
-        }
+        googleSignInHelper.mGoogleSignInClient.signOut();
     }
 
     /**
@@ -153,12 +165,16 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
      */
     @Override
     public void onClickFacebookLogin() {
-        signInHelper=new SignInHelper(mContext,mContext.getResources().getString(R.string.app_facebook));
-        if (signInHelper.mFacebookToken == null)
+    /*    if (mFacebookToken == null)
             LoginManager.getInstance().logInWithReadPermissions
                     (LoginFragment.this, Arrays.asList(FBPermission));
         else
-            signInHelper.getFBUserDetails(signInHelper.mFacebookToken);
+            getFBUserDetails(mFacebookToken);*/
+        if (facebookSignInHelper.mFacebookToken == null)
+            LoginManager.getInstance().logInWithReadPermissions
+                    (LoginFragment.this, Arrays.asList(FBPermission));
+        else
+            facebookSignInHelper.getFBUserDetails(facebookSignInHelper.mFacebookToken);
     }
 
     /**
@@ -171,9 +187,8 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     }
 
     private void signIn() {
-        signInHelper=new SignInHelper(mContext,mContext.getResources().getString(R.string.app_google));
-        Intent signInIntent = signInHelper.performSignIn();
-        startActivityForResult(signInIntent, signInHelper.RC_SIGN_IN);
+        Intent signInIntent = googleSignInHelper.performSignIn();
+        startActivityForResult(signInIntent, googleSignInHelper.RC_SIGN_IN);
     }
 
     /**
@@ -192,16 +207,16 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        signInHelper.mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        facebookSignInHelper.mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == signInHelper.RC_SIGN_IN) {
+        if (requestCode == googleSignInHelper.RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            signInHelper.handleSignInResult(task);
+            googleSignInHelper.handleSignInResult(task);
             return;
         }
         // Pass the activity result to the twitterAuthClient.
-        if (signInHelper.authClient != null)
-            signInHelper.authClient.onActivityResult(requestCode, resultCode, data);
+        if (twitterSignInHelper.authClient != null)
+            twitterSignInHelper.authClient.onActivityResult(requestCode, resultCode, data);
 
         // Pass the activity result to the login button.
         getmViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
