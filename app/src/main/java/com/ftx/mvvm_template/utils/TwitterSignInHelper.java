@@ -128,7 +128,7 @@ public class TwitterSignInHelper {
 
     /**
      * Name : LoginFragment onUserLoggedinSuccess
-     * <br> Purpose : This method will execute from presenter when user successfully loggedin.
+     * <br> Purpose : This method will execute from presenter when user successfully logged in.
      */
     public void onUserLoggedinSuccess() {
         // Redirect User to Home Page.
