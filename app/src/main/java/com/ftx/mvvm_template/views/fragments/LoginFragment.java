@@ -156,7 +156,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        googleSignInHelper.mGoogleSignInClient.signOut();
+        googleSignInHelper.getGoogleSignInClient().signOut();
     }
 
     /**
@@ -165,16 +165,11 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
      */
     @Override
     public void onClickFacebookLogin() {
-    /*    if (mFacebookToken == null)
+        if (facebookSignInHelper.getFacebookToken() == null)
             LoginManager.getInstance().logInWithReadPermissions
                     (LoginFragment.this, Arrays.asList(FBPermission));
         else
-            getFBUserDetails(mFacebookToken);*/
-        if (facebookSignInHelper.mFacebookToken == null)
-            LoginManager.getInstance().logInWithReadPermissions
-                    (LoginFragment.this, Arrays.asList(FBPermission));
-        else
-            facebookSignInHelper.getFBUserDetails(facebookSignInHelper.mFacebookToken);
+            facebookSignInHelper.getFBUserDetails(facebookSignInHelper.getFacebookToken());
     }
 
     /**
@@ -207,7 +202,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        facebookSignInHelper.mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        facebookSignInHelper.getCallbackManager().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == googleSignInHelper.RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -215,8 +210,8 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
             return;
         }
         // Pass the activity result to the twitterAuthClient.
-        if (twitterSignInHelper.authClient != null)
-            twitterSignInHelper.authClient.onActivityResult(requestCode, resultCode, data);
+        if (twitterSignInHelper.getAuthClient() != null)
+            twitterSignInHelper.getAuthClient().onActivityResult(requestCode, resultCode, data);
 
         // Pass the activity result to the login button.
         getmViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);

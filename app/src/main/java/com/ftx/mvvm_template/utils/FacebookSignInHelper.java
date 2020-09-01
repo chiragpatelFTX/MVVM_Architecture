@@ -37,15 +37,12 @@ public class FacebookSignInHelper {
     private static final String[] FBPermission = {"email", "public_profile"/*, "user_birthday"*/};
     private Context mContext;
     // FACEBOOK
-    public CallbackManager mCallbackManager;
-    public AccessToken mFacebookToken;
-    public FacebookSignInHelper(Context mContext/*, CallbackManager mCallbackManager*/) {
-        this.mContext = mContext;
-//        this.mCallbackManager = mCallbackManager;
+    private CallbackManager mCallbackManager;
+    private AccessToken mFacebookToken;
 
-//        registerFacebookCallback(mCallbackManager);
-        mCallbackManager = CallbackManager.Factory.create();
-        initFacebookSignIn(mCallbackManager);
+    public FacebookSignInHelper(Context mContext) {
+        this.mContext = mContext;
+        setCallBackManager(mCallbackManager);
     }
 
     /**
@@ -60,8 +57,7 @@ public class FacebookSignInHelper {
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                mFacebookToken = loginResult.getAccessToken();
-                getFBUserDetails(mFacebookToken);
+                setAccessToken(mFacebookToken, loginResult);
             }
 
             @Override
@@ -127,6 +123,51 @@ public class FacebookSignInHelper {
         ((AppBaseActivity) mContext).clearAllTopFragment();
 
         ((AppBaseActivity) mContext).setFragment(mChangeAssessment);
+    }
 
+    /**
+     * Name : FacebookSignInHelper getCallbackManager
+     * <br> Purpose : This method will return mCallbackManager.
+     */
+    public CallbackManager getCallbackManager() {
+        return mCallbackManager;
+    }
+
+    /**
+     * Name : FacebookSignInHelper setCallBackManager
+     * <br> Purpose : This method will sets callback manager.
+     */
+    public CallbackManager setCallBackManager(CallbackManager callbackManager) {
+        try {
+            callbackManager = CallbackManager.Factory.create();
+            initFacebookSignIn(callbackManager);
+            mCallbackManager = callbackManager;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return callbackManager;
+    }
+
+    /**
+     * Name : FacebookSignInHelper getFacebookToken
+     * <br> Purpose : This method will return mFacebookToken.
+     */
+    public AccessToken getFacebookToken() {
+        return mFacebookToken;
+    }
+
+    /**
+     * Name : FacebookSignInHelper setAccessToken
+     * <br> Purpose : This method will sets AccessToken of facebook.
+     */
+    public AccessToken setAccessToken(AccessToken accessToken, LoginResult loginResult) {
+        try {
+            accessToken = loginResult.getAccessToken();
+            getFBUserDetails(accessToken);
+            mFacebookToken = accessToken;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accessToken;
     }
 }

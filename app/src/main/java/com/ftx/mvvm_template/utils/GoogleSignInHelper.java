@@ -36,7 +36,7 @@ public class GoogleSignInHelper  {
     private Context mContext;
     public static final int RC_SIGN_IN = 101;
     private boolean isLoggingOut = false;
-    public GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient mGoogleSignInClient;
     public GoogleSignInHelper(Context mContext) {
         this.mContext = mContext;
         initGoogleSignIn();
@@ -56,7 +56,7 @@ public class GoogleSignInHelper  {
                 .requestEmail().requestProfile()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(mContext, gso);
+        setsGoogleSignInClient(mGoogleSignInClient, gso);
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(mContext);
@@ -66,7 +66,6 @@ public class GoogleSignInHelper  {
             Log.e(TAG, account.getDisplayName());
         }
     }
-
     /**
      * Name : GoogleSignInHelper performSignIn
      * <br/> Purpose : Initialize GoogleSignIn Intent
@@ -119,5 +118,27 @@ public class GoogleSignInHelper  {
 
         ((AppBaseActivity) mContext).setFragment(mChangeAssessment);
 
+    }
+
+    /**
+     * Name : GoogleSignInHelper getGoogleSignInClient
+     * <br> Purpose : This method will return mGoogleSignInClient.
+     */
+    public GoogleSignInClient getGoogleSignInClient() {
+        return mGoogleSignInClient;
+    }
+
+    /**
+     * Name : GoogleSignInHelper setGoogleSignInClient
+     * <br> Purpose : This method will sets GoogleSignInClient.
+     */
+    private GoogleSignInClient setsGoogleSignInClient(GoogleSignInClient googleSignInClient, GoogleSignInOptions gso) {
+        try {
+            googleSignInClient = GoogleSignIn.getClient(mContext, gso);
+            mGoogleSignInClient = googleSignInClient;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return googleSignInClient;
     }
 }

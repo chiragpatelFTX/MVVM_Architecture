@@ -32,7 +32,7 @@ import retrofit2.Call;
 public class TwitterSignInHelper {
     private static final String TAG = TwitterSignInHelper.class.getSimpleName();
     private Context mContext;
-    public TwitterAuthClient authClient;
+    private TwitterAuthClient mAuthClient;
     private TwitterLoginButton mTwitterLoginButton;
     public TwitterSignInHelper(Context mContext) {
         this.mContext = mContext;
@@ -46,7 +46,7 @@ public class TwitterSignInHelper {
      * @implNote
      */
     private void initTwitterSignIn() {
-        authClient = new TwitterAuthClient();
+        setAuthClient(mAuthClient);
         //To get the session
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
@@ -58,7 +58,6 @@ public class TwitterSignInHelper {
         //To clear the session
         TwitterCore.getInstance().getSessionManager().clearActiveSession();
     }
-
     /**
      * Name : TwitterSignInHelper registerTwitterCallback
      * <br/> Purpose : Register Twitter Call Back.
@@ -86,7 +85,7 @@ public class TwitterSignInHelper {
      * @param session
      */
     private void getTwitterUserDetails(TwitterSession session) {
-        authClient.requestEmail(session, new Callback<String>() {
+        mAuthClient.requestEmail(session, new Callback<String>() {
             @Override
             public void success(Result<String> result) {
                 // Do something with the result, which provides the email address
@@ -143,5 +142,27 @@ public class TwitterSignInHelper {
 
         ((AppBaseActivity) mContext).setFragment(mChangeAssessment);
 
+    }
+
+    /**
+     * Name : TwitterSignInHelper getAuthClient
+     * <br> Purpose : This method will return mAuthClient.
+     */
+    public TwitterAuthClient getAuthClient() {
+        return mAuthClient;
+    }
+
+    /**
+     * Name : TwitterSignInHelper setAccessToken
+     * <br> Purpose : This method will sets mAuthClient of Twitter.
+     */
+    private TwitterAuthClient setAuthClient(TwitterAuthClient authClient) {
+        try {
+            authClient = new TwitterAuthClient();
+            mAuthClient = authClient;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return authClient;
     }
 }

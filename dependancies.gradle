@@ -2,11 +2,11 @@ ext {
 
     supportLibVersion = '26.1.0'
     retrofitVersion = '2.9.0'
-    okHttpVersion = '3.8.1'
+    okHttpVersion = '4.8.1'
     leakCanaryVersion = '1.5.1'
-    frescoVersion = '1.5.0'
-    glideVersion = '3.8.0' // Glide is an image downloading library, Use any one fresco or glide.
-    gsonVersion = '2.8.1'
+    frescoVersion = '2.3.0'
+    glideVersion = '4.11.0' // Glide is an image downloading library, Use any one fresco or glide.
+    gsonVersion = '2.9.0'
     crashlyticsVersion = '2.7.1@aar'
     archLifecycleVersion = "2.0.0"
     archRoomVersion = "2.0.0"
@@ -47,7 +47,7 @@ ext {
             debugLeakCanary      : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
             releaseLeakCanary    : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
 
-            imagepicker          : "com.kbeanie:multipicker:1.1.31@aar",
+            imagepicker          : "com.kbeanie:multipicker:1.6@aar",
 
 //            gson    : "com.google.code.gson:gson:$gsonVersion",
             crashlytics : "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion",
