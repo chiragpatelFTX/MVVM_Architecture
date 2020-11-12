@@ -68,7 +68,7 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     /**
-     * Name : LoginFragment validateForm
+     * Name : LoginViewModel validateForm
      * <br> Purpose :
      * This method will first locally validate the login form.
      * and if there are any local errors then we will set error to respected
@@ -88,6 +88,12 @@ public class LoginViewModel extends BaseViewModel {
         }
     }
 
+    /**
+     * Name : LoginViewModel loginUser
+     * @param sUserName
+     * @param sPassword
+     * <br> Purpose : Login user using username and password
+     */
     public void loginUser(String sUserName, String sPassword) {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             mLoginView.toast("Please check internet connection");

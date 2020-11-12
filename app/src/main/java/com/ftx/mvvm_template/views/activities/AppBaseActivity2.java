@@ -47,7 +47,7 @@ public abstract class AppBaseActivity2<T extends ViewDataBinding, V extends Base
     private T mViewDataBinding;
     private V mViewModel;
 
-    public T getmViewDataBinding() {
+    public T getViewDataBinding() {
         return mViewDataBinding;
     }
 

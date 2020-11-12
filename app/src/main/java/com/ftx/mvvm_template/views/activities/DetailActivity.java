@@ -40,7 +40,7 @@ public class DetailActivity extends AppBaseActivity2<ActivityDetailBinding, Deta
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = getmViewDataBinding();
+        mBinding = getViewDataBinding();
         setSupportActionBar(mBinding.toolbar);
         mBundle = getIntent().getExtras();
 

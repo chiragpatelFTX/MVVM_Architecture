@@ -45,7 +45,7 @@ public class UserFragment extends BaseFragment2<FragmentUsersBinding, HomeViewMo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        getmViewDataBinding().setAdapter(new UserAdapter(mContext));
-        return getmViewDataBinding().getRoot();
+        getViewDataBinding().setAdapter(new UserAdapter(mContext));
+        return getViewDataBinding().getRoot();
     }
 }

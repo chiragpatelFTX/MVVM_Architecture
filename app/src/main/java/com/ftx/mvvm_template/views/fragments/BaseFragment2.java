@@ -38,9 +38,8 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
     String TAG = "BaseFragment";
     private Dialog mProgressDialog;
     private T mViewDataBinding;
-    private V mViewModel;
 
-    public T getmViewDataBinding() {
+    public T getViewDataBinding() {
         return mViewDataBinding;
     }
 
@@ -71,18 +70,24 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
 
     @Override
     public void onDestroyView() {
-        AppLog.e(TAG, "onDestroyView");
+        AppLog.d(TAG, "onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        AppLog.e(TAG, "onDestroy");
+        AppLog.d(TAG, "onDestroy");
         super.onDestroy();
     }
 
+
+    /**
+     * @param viewModelClass = Generic View Model class instance
+     * @param <T>
+     * @return Return appropriate view model class instance
+     */
     public <T extends ViewModel> T getViewModel(Class<T> viewModelClass) {
-        return ViewModelProviders.of(this/*, getAppInstance().getViewModelFactory()*/).get(viewModelClass);
+        return ViewModelProviders.of(this).get(viewModelClass);
     }
 
     /**
@@ -100,7 +105,6 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
 
     /**
      * Name : BaseFragment onStart
-     * <br> Purpose : onStart of the fragment register the event bus.
      */
     @Override
     public void onStart() {
@@ -111,7 +115,6 @@ public abstract class BaseFragment2<T extends ViewDataBinding, V extends BaseVie
 
     /**
      * Name : BaseFragment onStop
-     * <br> Purpose : OnStop of the fragment unregister eventbus.
      */
     @Override
     public void onStop() {

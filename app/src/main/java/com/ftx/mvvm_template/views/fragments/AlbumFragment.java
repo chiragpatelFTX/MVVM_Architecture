@@ -46,8 +46,8 @@ public class AlbumFragment extends BaseFragment2<FragmentAlbumsBinding, HomeView
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        getmViewDataBinding().setAdapter(new AlbumAdapter(mContext));
-        return getmViewDataBinding().getRoot();
+        getViewDataBinding().setAdapter(new AlbumAdapter(mContext));
+        return getViewDataBinding().getRoot();
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.ftx.mvvm_template.model.db.models;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,6 +12,8 @@ import androidx.room.PrimaryKey;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ftx.mvvm_template.utils.AppLog;
+
+import java.util.Objects;
 
 /**
  * Name : AlbumModel
@@ -77,9 +82,10 @@ public class AlbumModel {
             return oldAlbumModel.userId == newAlbumModel.userId;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public boolean areContentsTheSame(@NonNull AlbumModel oldAlbumModel, @NonNull AlbumModel newAlbumModel) {
-            return oldAlbumModel.equals(newAlbumModel);
+            return Objects.equals(oldAlbumModel, newAlbumModel);
         }
     };
 }

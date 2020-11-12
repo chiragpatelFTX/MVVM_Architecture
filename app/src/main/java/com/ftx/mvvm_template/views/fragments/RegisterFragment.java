@@ -56,7 +56,7 @@ public class RegisterFragment extends BaseFragment2<FragmentRegisterBinding, Reg
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return getmViewDataBinding().getRoot();
+        return getViewDataBinding().getRoot();
     }
 
     @Override
@@ -111,6 +111,6 @@ public class RegisterFragment extends BaseFragment2<FragmentRegisterBinding, Reg
 
     @Override
     public void onRegisterClicked() {
-        mRegViewModel.validateForm(getmViewDataBinding());
+        mRegViewModel.validateForm(getViewDataBinding());
     }
 }

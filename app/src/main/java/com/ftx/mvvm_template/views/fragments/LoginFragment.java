@@ -116,14 +116,102 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
                 apiError((APIError) apiResponse.getSingalData());
             } else {
                 LoginResponse mLoginResponse = apiResponse.getSingalData() instanceof LoginResponse ? (LoginResponse) apiResponse.getSingalData() : new LoginResponse();
-                if (mLoginResponse != null && !TextUtils.isEmpty(mLoginResponse.getToken())) {
+                if (!TextUtils.isEmpty(mLoginResponse.getToken())) {
                     Log.d(TAG, mLoginResponse.getToken());
                     onLoginSuccess();
                 }
             }
 
         });
+// <<<<<<< V1.1
         twitterSignInHelper.registerTwitterCallback(getmViewDataBinding().btnTwitter);
+// =======
+//         registerTwitterCallback();
+    }
+
+//     private void registerTwitterCallback() {
+//         getViewDataBinding().btnTwitter.setCallback(new Callback<TwitterSession>() {
+//             @Override
+//             public void success(Result<TwitterSession> result) {
+//                 // Do something with result, which provides a TwitterSession for making API calls
+//                 getTwitterUserDetails(result.data);
+//             }
+
+//             @Override
+//             public void failure(TwitterException exception) {
+//                 // Do something on failure
+//             }
+//         });
+//     }
+
+//     private void getTwitterUserDetails(TwitterSession session) {
+//         authClient.requestEmail(session, new Callback<String>() {
+//             @Override
+//             public void success(Result<String> result) {
+//                 // Do something with the result, which provides the email address
+//                 Log.e(TAG, "User Id : " + session.getUserId() + "\nScreen Name : " + session.getUserName() + "\nEmail Id : " + result.data);
+//             }
+
+//             @Override
+//             public void failure(TwitterException exception) {
+//                 // Do something on failure
+//             }
+//         });
+
+//         TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+//         Call<User> call = twitterApiClient.getAccountService().verifyCredentials(true, false, true);
+//         call.enqueue(new Callback<User>() {
+//             @Override
+//             public void success(Result<User> result) {
+//                 // Do something with result, which provides a User
+//                 User user = result.data;
+//                 Log.e(TAG, "User Id : " + user.id + "\nUser Name : " + user.name + "\nEmail Id : " + user.email + "\nScreen Name : " + user.screenName);
+
+//                 String imageProfileUrl = user.profileImageUrl;
+//                 Log.e(TAG, "Data : " + imageProfileUrl);
+//                 //NOTE : User profile provided by twitter is very small in size i.e 48*48
+//                 //Link : https://developer.twitter.com/en/docs/accounts-and-users/user-profile-images-and-banners
+//                 //so if you want to get bigger size image then do the following:
+//                 imageProfileUrl = imageProfileUrl.replace("_normal", "");
+//                 Log.e(TAG, "Data : " + imageProfileUrl);
+
+//                 onUserLoggedinSuccess();
+//             }
+
+//             @Override
+//             public void failure(TwitterException exception) {
+//                 // Do something on failure
+//             }
+//         });
+//     }
+
+//     /**
+//      * Name : LoginFragment registerFacebookCallback
+//      * <br> Purpose :
+//      * This method will register the callback manager while we do login with facebook.
+//      *
+//      * @param mCallbackManager : callback manager of facebook to get the login success or not from facebook
+//      *                         and receive the access token.
+//      */
+//     private void registerFacebookCallback(CallbackManager mCallbackManager) {
+//         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//             @Override
+//             public void onSuccess(LoginResult loginResult) {
+//                 mFacebookToken = loginResult.getAccessToken();
+//                 getFBUserDetails(mFacebookToken);
+//             }
+
+//             @Override
+//             public void onCancel() {
+//                 apiError(new APIError(0, "You have cancelled the login with facebook."));
+//             }
+
+//             @Override
+//             public void onError(FacebookException error) {
+//                 apiError(new APIError(error.hashCode(), error.getMessage()));
+//             }
+//         });
+// >>>>>>> master
     }
 
     /**
@@ -146,7 +234,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
     @Override
     public void onLoginClicked() {
-        mLoginViewModel.validateForm(getmViewDataBinding());
+        mLoginViewModel.validateForm(getViewDataBinding());
     }
 
     /**
@@ -214,6 +302,6 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
             twitterSignInHelper.getAuthClient().onActivityResult(requestCode, resultCode, data);
 
         // Pass the activity result to the login button.
-        getmViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
+        getViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
     }
 }
