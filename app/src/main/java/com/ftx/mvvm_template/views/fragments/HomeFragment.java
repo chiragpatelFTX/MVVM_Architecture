@@ -48,7 +48,7 @@ public class HomeFragment extends BaseFragment2<FragmentHomeBinding, HomeViewMod
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setupViewPager();
-        return getmViewDataBinding().getRoot();
+        return getViewDataBinding().getRoot();
     }
 
     /**
@@ -59,7 +59,7 @@ public class HomeFragment extends BaseFragment2<FragmentHomeBinding, HomeViewMod
         PagerAdapter adapter = new PagerAdapter(getChildFragmentManager());
         adapter.addFragment(new AlbumFragment(), "Albums");
         adapter.addFragment(new UserFragment(), "Users");
-        getmViewDataBinding().viewPager.setAdapter(adapter);
-        getmViewDataBinding().resultTabs.setupWithViewPager(getmViewDataBinding().viewPager);
+        getViewDataBinding().viewPager.setAdapter(adapter);
+        getViewDataBinding().resultTabs.setupWithViewPager(getViewDataBinding().viewPager);
     }
 }

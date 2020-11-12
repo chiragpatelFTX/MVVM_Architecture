@@ -21,11 +21,11 @@ import java.util.List;
 public class DatabaseAsync<T extends Object> extends AsyncTask<Void, Void, T> {
 
     T response;
-    private int caseInsertUserList;
-    private Context mContext;
-    private MyDatabase mDatabase;
-    private Object mObject;
-    private AsyncTaskCompleteListener mListener;
+    private final int caseInsertUserList;
+    private final Context mContext;
+    private final MyDatabase mDatabase;
+    private final Object mObject;
+    private final AsyncTaskCompleteListener mListener;
 
 
     public DatabaseAsync(Context context,

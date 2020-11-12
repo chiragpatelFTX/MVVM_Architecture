@@ -129,7 +129,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
                 apiError((APIError) apiResponse.getSingalData());
             } else {
                 LoginResponse mLoginResponse = apiResponse.getSingalData() instanceof LoginResponse ? (LoginResponse) apiResponse.getSingalData() : new LoginResponse();
-                if (mLoginResponse != null && !TextUtils.isEmpty(mLoginResponse.getToken())) {
+                if (!TextUtils.isEmpty(mLoginResponse.getToken())) {
                     Log.d(TAG, mLoginResponse.getToken());
                     onLoginSuccess();
                 }
@@ -140,7 +140,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
     }
 
     private void registerTwitterCallback() {
-        getmViewDataBinding().btnTwitter.setCallback(new Callback<TwitterSession>() {
+        getViewDataBinding().btnTwitter.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
                 // Do something with result, which provides a TwitterSession for making API calls
@@ -282,7 +282,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
     @Override
     public void onLoginClicked() {
-        mLoginViewModel.validateForm(getmViewDataBinding());
+        mLoginViewModel.validateForm(getViewDataBinding());
     }
 
     /**
@@ -350,7 +350,7 @@ public class LoginFragment extends BaseFragment2<FragmentLoginBinding, LoginView
 
 
         // Pass the activity result to the login button.
-        getmViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
+        getViewDataBinding().btnTwitter.onActivityResult(requestCode, resultCode, data);
     }
 
 

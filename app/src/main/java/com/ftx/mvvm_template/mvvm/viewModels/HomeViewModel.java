@@ -93,18 +93,18 @@ public class HomeViewModel extends BaseViewModel {
      */
     public void loadAlbumResponse() {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
-            mHomeView.noInternetConnection(() -> loadAlbumResponse());
+            mHomeView.noInternetConnection(this::loadAlbumResponse);
         } else {
             mHomeView.showLoader(mContext.getString(R.string.message_loader_loading_albums));
             mAlbumLiveData.addSource(
                     mHomeRepo.getAlbumList(), apiResponse -> {
                         mHomeView.hideLoader();
                         new DatabaseAsync<ApiResponse>(mContext,
-                                mDatabase,
-                                apiResponse,
-                                Constants.Database.INSERT_ALBUMLIST,
-                                result -> mAlbumLiveData.setValue(apiResponse)
-                        ).execute();
+                                                        mDatabase,
+                                                        apiResponse,
+                                                        Constants.Database.INSERT_ALBUMLIST,
+                                                        result -> mAlbumLiveData.setValue(apiResponse)
+                                                      ).execute();
                     }
             );
         }
@@ -114,7 +114,7 @@ public class HomeViewModel extends BaseViewModel {
      * Name : getPagedUserList
      * <br> Purpose : To get updated UserModel called from HomeFragment.
      *
-     * @return this method will return Livedata of PagedList<UserModel>
+     * @return this method will return LiveData of PagedList<UserModel>
      */
     public LiveData<PagedList<UserModel>> getPagedUserList() {
         return pagedUserList;
